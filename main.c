@@ -1,4 +1,4 @@
-#include "ncurcesInterface.h"
+#include "interface/ncurses_Interface.h"
 #include <unistd.h>
 
 int main(){
@@ -6,9 +6,9 @@ int main(){
 
 	init();
 	printMessage("HI	H for HELP ");
-	while(1){
-	actionOnInterface();}
-	sleep(10);
+	while(actionOnInterface()){
+	;}
+	sleep(1);
 
 	return 0;
 }

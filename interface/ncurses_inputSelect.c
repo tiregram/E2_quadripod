@@ -1,15 +1,16 @@
-#include "inputSelec.h"
-#include "ncurcesInterface.h"
+#include "ncurses_inputSelect.h"
+#include "ncurses_Interface.h"
 #include <math.h>
 #include <stdlib.h>
 #include <ncurses.h>
 
+unsigned long  	privFunc_passArray_To_Char(struct input_panel * panel);
 int assignValeur(struct input_panel * panel,int ch);
 void selectedInput(struct input_panel * panel);
 void	privFunc_passChar_To_Array(struct input_panel * panel);
 void changeByte(struct input_panel * panel,unsigned char ch,int nb);
 void deselectedInput(struct input_panel * panel);
-struct input_panel * inputSelect_init(unsigned char * pval,int y,int x,int min,int max,int nbByte){	
+struct input_panel * inputSelect_init(unsigned long * pval,int y,int x,unsigned long  min,unsigned long  max,int nbByte){	
 	struct input_panel * locale=NULL;
 	locale= malloc(sizeof(struct input_panel));
 	locale->tab= malloc(sizeof(char)*nbByte);
@@ -20,34 +21,32 @@ struct input_panel * inputSelect_init(unsigned char * pval,int y,int x,int min,i
 	locale->pos = newwin(1, nbByte, y, x);
 		
 	inputSelect_set(locale,*pval);	
-	privFunc_passChar_To_Array(locale);
 	inputSelect_Actualiser(locale);
 	return locale;
 }
 
-void inputSelect_Actualiser_recursive(struct input_panel * enumvarpanel ,int pval ,int byteNum){
-	unsigned int var = pval / (int) pow(10,byteNum-1);
-	mvwaddch( enumvarpanel->pos,0,enumvarpanel->byte-byteNum,(var+48)| A_BOLD | A_UNDERLINE);
-	if(byteNum!=1){
-		inputSelect_Actualiser_recursive( enumvarpanel ,pval-var*pow(10,byteNum-1),byteNum-1);
+
+void inputSelect_Actualiser(struct input_panel * panel){
+	int i = 0;
+	unsigned char * tab = panel->tab;
+	for(i=0; i<panel->byte; i++){
+		mvwaddch( panel->pos,0,i,(tab[i]+48)| A_BOLD | A_UNDERLINE);
 	}
-
-}
-void inputSelect_Actualiser(struct input_panel * enumvarpanel){
-	inputSelect_Actualiser_recursive( enumvarpanel,*(enumvarpanel->val),enumvarpanel->byte );
-	wrefresh(enumvarpanel->pos);	
+	wrefresh(panel->pos);
+	
 }
 
-void inputSelect_set(struct input_panel * panel ,unsigned char pval){
+void inputSelect_set(struct input_panel * panel ,unsigned long pval){
 	if (pval<panel->min) {
 		*(panel->val) = panel->min;
-		return;
 	}
-	if (pval>panel->max) {
+	else if (pval>panel->max) {
 		*(panel->val) = panel->max;
-		return;
+	}else {
+		*(panel->val) = pval;
 	}
-	*(panel->val) = pval;
+
+	privFunc_passChar_To_Array(panel);
 }
 
 void inputSelect_modifInput(struct input_panel * panel){
@@ -57,12 +56,25 @@ void inputSelect_modifInput(struct input_panel * panel){
 	wmove(panel->pos,0,0);
 	while(exit){
 		ch = wgetch(panel->pos);	
-		if((ch&0xFF)>47 && (ch&0xFF)<58){
+		if(ch>47 && ch<58){
 			exit = assignValeur(panel,ch);						
-		}
+		}else 
 		if(ch == 'q'){
 			exit =0;	
-		}	
+		}else 
+		if(ch==KEY_UP){
+		
+		}else
+		if(ch==KEY_DOWN){
+		
+		}else
+		if(ch==KEY_DOWN){
+		
+		}else 
+		if(ch==KEY_DOWN){
+		
+		}
+
 
 
 	}
@@ -70,9 +82,9 @@ void inputSelect_modifInput(struct input_panel * panel){
 }
 
 int assignValeur(struct input_panel * panel,int ch){
-	int x,y,nb;
+	int x,y;
 	getyx(panel->pos,y,x);
-	changeByte(panel,ch,panel->byte-x);		
+	changeByte(panel,ch,x);	
 	if(x+1==panel->byte)
 		return 0;		
 	wmove(panel->pos,y,x+1);
@@ -80,18 +92,12 @@ int assignValeur(struct input_panel * panel,int ch){
 
 }
 
-void changeByte(struct input_panel * panel,unsigned char ch,int nb){
-	unsigned int rang = (unsigned int ) pow(10,nb-1);
-	unsigned char valeurDeLaCible = *(panel->val);
-	unsigned char byteDi =(valeurDeLaCible/rang)%10;
-	unsigned char newVal = valeurDeLaCible
-		-byteDi * rang 
-		+(ch-48)*rang; 
 
-	inputSelect_set(panel , newVal);
-	newVal = *panel->val;
-	unsigned char var = (newVal/rang)%10;
-	waddch( panel->pos,(var+48)| A_BOLD | A_UNDERLINE);
+void changeByte(struct input_panel * panel,unsigned char ch,int nb){
+	panel->tab[nb]=ch-48;
+	inputSelect_set(panel,privFunc_passArray_To_Char(panel));
+
+	waddch( panel->pos,(panel->tab[nb]+48)| A_BOLD | A_UNDERLINE);
 }
 
 
@@ -105,18 +111,30 @@ void deselectedInput(struct input_panel * panel){
 	inputSelect_Actualiser(panel);
 }
 
-void inputSelect_changeCible(struct input_panel * panel , unsigned char * pval){
+void inputSelect_changeCible(struct input_panel * panel , unsigned long * pval){
 	panel->val = pval;
+	inputSelect_set(panel,*pval);	
 }
 
 
+
+unsigned long  	privFunc_passArray_To_Char(struct input_panel * panel){
+	int i;
+	unsigned char *  tab = panel->tab;
+	unsigned char *  tabTemp = malloc(sizeof(char)*panel->byte);
+	for(i = 0; i<panel->byte;i++)
+		tabTemp[i]=tab[i]+48;
+	
+	unsigned long ret=atol(tabTemp);
+	free(tabTemp);	
+	return ret;
+}
 
 void	privFunc_passChar_To_Array(struct input_panel * panel){
 	int i;
 	unsigned char *  tab = panel->tab;
 	for(i = 0; i<panel->byte;i++)
-		tab[i]=(*(panel->val)/(int)pow(10,panel->byte-i-1))%10;	
-
+		tab[i]=(int)((*panel->val)/pow(10,panel->byte-i-1))%10;	
 
 
 }

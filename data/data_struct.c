@@ -1,13 +1,15 @@
 #include <stdlib.h>
-#include "struct.h"
+#include <string.h>
+#include <unistd.h>
+#include "data_struct.h"
 
 struct circular_vector_mouv{
 	struct circular_vector_mouv * next;
 	struct circular_vector_mouv * prev;
 	t_mouv *  mouv;
 };
-void malloc_a_mouv(struct circular_vector_mouv * prec,t_mouv * val,struct circular_vector_mouv * suiv);
 
+void malloc_a_mouv(struct circular_vector_mouv * prec,t_mouv * val,struct circular_vector_mouv * suiv);
 t_mouv* instance_mouvs();
 struct circular_vector_mouv * first;
 struct circular_vector_mouv * curent;
@@ -68,7 +70,20 @@ t_mouv * getmouvs(){
 	return curent->mouv;
 }
 
+void list(){
+	char a[100]="";
+	int nb = 0;
+	struct circular_vector_mouv * i = curent->next;
+	//printMessage("Debut");
+	while(i!=curent){
+		a[0] =0;
+	//	sprintf(a,"n*%i, => pin=%i | pin=%i",nb++,i->mouv->pin,i->mouv->pos);
+	//	printMessage(a);
+		i = i->next;
+	}
+	//printMessage("Fin");
 
+}
 
 void free_all(){
 	struct circular_vector_mouv * i = first->next; 
@@ -77,7 +92,4 @@ void free_all(){
 		free(i->prev);	
 	}
 	free(first);		
-
 }
-
-

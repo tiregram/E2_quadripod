@@ -1,7 +1,7 @@
 #include <ncurses.h>
 #include <unistd.h>
-#include "ncurcesInterface.h"
-#include "inputSelec.h"
+#include "ncurses_Interface.h"
+#include "ncurses_inputSelect.h"
 
 
 void new_frame();
@@ -52,19 +52,19 @@ void printMessage(char* mess){
 	getyx(boxMessage, vy, vx);
 	getmaxyx(boxMessage,vyMax,vxMax);
 	if(vy<vyMax-2){	
-			
+
 		mvwprintw(boxMessage,vy+1,6,mess);	
 	}else{
 
 		mvwprintw(boxMessage,3,6,"  ");
 
 	}
-		wrefresh(boxMessage);
+	wrefresh(boxMessage);
 }
 
 
 int actionOnInterface(){
-	
+
 	mvwprintw(selectArea,0,0,"cmd:");
 	wrefresh(selectArea);
 	int ch = wgetch(selectArea);
@@ -72,44 +72,44 @@ int actionOnInterface(){
 	sprintf(str,"a:%i:a",listServo[1].position);
 	switch(ch){
 		case 'q':
-			changeServoWindow('a');		
-			
-		break;
-		
+			return 0;		
+
+			break;
+
 		case KEY_LEFT:
 			changeServoWindow(ch);
-		break;
+			break;
 		case KEY_RIGHT:
 			changeServoWindow(ch);	
-		break;
+			break;
+		case 'l':
+			list(STRUCT_AVANT);
+			break;
 
 		case 'n':
 			change_to_frame(STRUCT_AVANT);
-		break;
+			break;
 		case 'b':
 			change_to_frame(STRUCT_APRES);	
-		break;
+			break;
 		case 'c':
 			new_frame();
 			break;	
-		
-
-
 		case 'h':
 			printMessage("HELP ME.... NO!");	
-		break;
+			break;
 
 		case KEY_UP:
-			inputSelect_modifInput(listServo[1].pin);
-		break;
-	
+			inputSelect_modifInput(listServo[servoActual].pin);
+			break;
+
 		case KEY_DOWN:	
-			inputSelect_modifInput(listServo[1].position);
-		break;
-	
+			inputSelect_modifInput(listServo[servoActual].position);
+			break;
+
 
 	}
-
+	return 1;
 
 }
 
@@ -124,7 +124,7 @@ void createServoWindow(char* description ,t_mouv * mouvOfThisServo){
 		getbegyx(listServo[nbOfServo].win_serv,y,x);		
 		listServo[nbOfServo].position = inputSelect_init(&(mouvOfThisServo->pos),y+4,x+9,1,255,3);	
 		listServo[nbOfServo].pin = inputSelect_init(&(mouvOfThisServo->pin),y+2,x+9,1,20,2);	
-	
+
 		mvwprintw(listServo[nbOfServo].win_serv, 4, 2, "pos:");
 
 		wrefresh(listServo[nbOfServo].win_serv);
@@ -142,7 +142,7 @@ void changeServoWindow(int direction){
 		}else if (direction==KEY_LEFT)
 			servoActual--;
 		servoActual = (servoActual+nbOfServo)%nbOfServo;
-		
+
 		focusWindow();
 	}
 
@@ -216,12 +216,12 @@ void create_a_frame(){
 
 
 void new_frame(){
-	//new(STRUCT_AVANT);
-	//change_to_frame(STRUCT_AVANT);
+	new(STRUCT_AVANT);
+	change_to_frame(STRUCT_APRES);
 }
 
 void change_to_frame(char av_ar){
-	
+
 	if(av_ar==STRUCT_AVANT){
 		next();
 		printMessage("servoNext");	
@@ -229,9 +229,9 @@ void change_to_frame(char av_ar){
 		prev();
 		printMessage("servoPrec");	
 	}
-	
+
 	replace_all_servoWindows();
-		
+
 }
 
 
