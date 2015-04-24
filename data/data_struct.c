@@ -1,25 +1,23 @@
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
+#include <stdio.h>
+#include "../include/basic.h"
 #include "data_struct.h"
 
-struct circular_vector_mouv{
-	struct circular_vector_mouv * next;
-	struct circular_vector_mouv * prev;
-	t_mouv *  mouv;
-};
+#define out(a) printf(a)
 
-void malloc_a_mouv(struct circular_vector_mouv * prec,t_mouv * val,struct circular_vector_mouv * suiv);
+
+void malloc_a_mouv(struct circular_vector_mouv * prec,struct circular_vector_mouv * suiv);
 t_mouv* instance_mouvs();
-struct circular_vector_mouv * first;
-struct circular_vector_mouv * curent;
 
-void struct_init(){
-	first= malloc(sizeof(struct circular_vector_mouv));
-	first->next = first;
-	first->prev = first;
-	first->mouv = instance_mouvs();	
-	curent=first;
+circular_vector *  struct_init(){
+	circular_vector * this = malloc(sizeof(circular_vector));	
+	this->first = malloc(sizeof(struct circular_vector_mouv));
+	this->first->next = this->first;
+	this->first->prev = this->first;
+	this->first->mouv = instance_mouvs();	
+	this->curent=this->first;
+	return this;
 }
 
 
@@ -32,7 +30,7 @@ t_mouv* instance_mouvs(){
 	}
 	return mouvs;
 }
-void malloc_a_mouv(struct circular_vector_mouv * prec,t_mouv * val,struct circular_vector_mouv * suiv)
+void malloc_a_mouv(struct circular_vector_mouv * prec,struct circular_vector_mouv * suiv)
 {	
 	struct circular_vector_mouv * theNew;
 	theNew=malloc(sizeof(struct circular_vector_mouv));
@@ -46,50 +44,80 @@ void malloc_a_mouv(struct circular_vector_mouv * prec,t_mouv * val,struct circul
 
 
 void new_mouvs(char av_ap,struct circular_vector_mouv * mouv){
-	if(av_ap == STRUCT_AVANT){malloc_a_mouv(mouv->prev,instance_mouvs(),mouv);
+	if(av_ap == STRUCT_AVANT){malloc_a_mouv(mouv->prev,mouv);
 	} 
-	else if(av_ap == STRUCT_APRES){malloc_a_mouv(mouv,instance_mouvs(),mouv);
+	else if(av_ap == STRUCT_APRES){malloc_a_mouv(mouv,mouv);
 	
 	}
 
 
 } 
 
-void new(char av_ap){
-	new_mouvs(av_ap,curent);
+void struct_new(circular_vector * this,char av_ap){
+	new_mouvs(av_ap,this->curent);
 }
-void next(){
-	curent = curent->next;
-}
-
-void prev(){
-	curent = curent->prev;
-
-}
-t_mouv * getmouvs(){
-	return curent->mouv;
+void struct_next(circular_vector * this){
+	this->curent = this->curent->next;
 }
 
-void list(){
+void struct_prev(circular_vector * this){
+	this->curent = this->curent->prev;
+
+}
+t_mouv * getmouvs(circular_vector * this){
+	return this->curent->mouv;
+}
+
+void struct_list(circular_vector * this ){
 	char a[100]="";
 	int nb = 0;
-	struct circular_vector_mouv * i = curent->next;
-	//printMessage("Debut");
-	while(i!=curent){
+	struct circular_vector_mouv * i = this->curent;
+	out("Debut\n");
+	do{
+		printf("Element n*%i\n",nb++);	
 		a[0] =0;
-	//	sprintf(a,"n*%i, => pin=%i | pin=%i",nb++,i->mouv->pin,i->mouv->pos);
-	//	printMessage(a);
+		for(int j = 0; j<nb_servo;j++){
+			sprintf(a,"=> pin=%3i | pin=%2i \n",i->mouv[j].pin,i->mouv[j].pos);
+			out(a);}
 		i = i->next;
+	}while(i!=this->curent);
+	out("Fin\n");
+}
+
+void struct_set(circular_vector * this, t_mouv *t ){
+	free(this->curent->mouv);
+	this->curent->mouv = t;	
+}
+
+t_mouv * struct_mouv(unsigned long * pin ,unsigned long * pos){
+	t_mouv * ret  = malloc(sizeof(t_mouv)*nb_servo);  
+	for(int i=0;i<nb_servo;i++){
+		ret[i].pin = pin[i];
+		ret[i].pos = pos[i];
 	}
-	//printMessage("Fin");
+	return ret;
+}
+
+void struct_set_From_Array(circular_vector * this,unsigned long * pin ,unsigned long * pos){
+	t_mouv * loc  = struct_mouv(pin ,pos);
+	struct_set(this,loc);
 
 }
 
-void free_all(){
-	struct circular_vector_mouv * i = first->next; 
-	while(i!=first){
-		i = i->next;
-		free(i->prev);	
-	}
-	free(first);		
+
+
+
+
+void struct_free_circular_vector(circular_vector * this ){
+	struct circular_vector_mouv * p = this->first;
+       	struct circular_vector_mouv * s ; 	
+	int nb = 0;
+	do{
+		printf("lib %i\n",nb++);
+		s = p->next;
+		free(p->mouv);
+		free(p);
+		p=s;	
+	}while(this->first!=s);
+	free(this);	
 }

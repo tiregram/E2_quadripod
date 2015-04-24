@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include "ncurses_Interface.h"
 #include "ncurses_inputSelect.h"
-
+#define debug debug
 
 void new_frame();
 void change_to_frame(char av_ar);
@@ -12,11 +12,7 @@ void defocusWindow();
 void destroy_win(WINDOW *local_win);
 WINDOW *create_newwin(int height, int width, int starty, int startx);
 WINDOW *boxMessage;
-struct servo{
-	struct input_panel* position;
-	struct input_panel*  pin;
-	WINDOW * win_serv;
-};
+
 
 int nbOfServo;
 int servoActual;
@@ -48,9 +44,11 @@ void  init(){
 }
 
 void printMessage(char* mess){
-	int vy , vx,vyMax,vxMax;
-	getyx(boxMessage, vy, vx);
-	getmaxyx(boxMessage,vyMax,vxMax);
+	int vy ,vyMax;
+	int null;
+	getyx(boxMessage, vy,null);
+	getmaxyx(boxMessage,vyMax,null);
+	null=null;//be here to cancel the warning
 	if(vy<vyMax-2){	
 
 		mvwprintw(boxMessage,vy+1,6,mess);	
@@ -64,12 +62,11 @@ void printMessage(char* mess){
 
 
 int actionOnInterface(){
-
+	
+	int ch;
 	mvwprintw(selectArea,0,0,"cmd:");
 	wrefresh(selectArea);
-	int ch = wgetch(selectArea);
-	char str[100];
-	sprintf(str,"a:%i:a",listServo[1].position);
+       	ch= wgetch(selectArea);
 	switch(ch){
 		case 'q':
 			return 0;		
@@ -104,7 +101,7 @@ int actionOnInterface(){
 			break;
 
 		case KEY_DOWN:	
-			inputSelect_modifInput(listServo[servoActual].position);
+			inputSelect_modifInput(listServo[servoActual].pos);
 			break;
 
 
@@ -113,25 +110,6 @@ int actionOnInterface(){
 
 }
 
-
-void createServoWindow(char* description ,t_mouv * mouvOfThisServo){
-	int x,y;
-	if(nbOfServo<20){	
-		listServo[nbOfServo].win_serv= create_newwin(6,20,1+8*(nbOfServo/4),decalX+20*(nbOfServo%4)+1);
-		wprintw(listServo[nbOfServo].win_serv,"n*%i %s",nbOfServo,description);
-
-		mvwprintw(listServo[nbOfServo].win_serv, 2, 2, "pin:");
-		getbegyx(listServo[nbOfServo].win_serv,y,x);		
-		listServo[nbOfServo].position = inputSelect_init(&(mouvOfThisServo->pos),y+4,x+9,1,255,3);	
-		listServo[nbOfServo].pin = inputSelect_init(&(mouvOfThisServo->pin),y+2,x+9,1,20,2);	
-
-		mvwprintw(listServo[nbOfServo].win_serv, 4, 2, "pos:");
-
-		wrefresh(listServo[nbOfServo].win_serv);
-		nbOfServo++;
-	}
-
-}
 
 void changeServoWindow(int direction){
 
@@ -150,8 +128,8 @@ void changeServoWindow(int direction){
 }
 void replace_one_servoWindows(int indice,t_mouv   mouv){
 	inputSelect_changeCible(listServo[indice].pin,&(mouv.pin));
-	inputSelect_changeCible(listServo[indice].position,&(mouv.pos));
-	inputSelect_Actualiser(listServo[indice].position);
+	inputSelect_changeCible(listServo[indice].pos,&(mouv.pos));
+	inputSelect_Actualiser(listServo[indice].pos);
 	inputSelect_Actualiser(listServo[indice].pin);
 
 }
@@ -161,7 +139,7 @@ void replace_all_servoWindows(){
 	int i;
 	t_mouv * mouv = getmouvs();
 	char a [100];
-	sprintf(a,"test valeur: %i",mouv);
+	sprintf(a,"test valeur: %ld",mouv->pos);
 	printMessage(a);
 	for(i= 0; i <nb_servo;i++)
 		replace_one_servoWindows(i,mouv[i]);
@@ -177,36 +155,13 @@ void focusWindow(){
 	wrefresh(listServo[servoActual].win_serv);
 }
 
-void refrechWindows(){
-	int i = 0;
-	for(i = 0 ; i<nbOfServo ; i++){
-		box(listServo[i].win_serv, 0 , 0);
-		wrefresh(listServo[i].win_serv);
-	}
-}
 
-
-WINDOW *create_newwin(int height, int width, int starty, int startx)
-{	WINDOW *local_win;
-
-	local_win = newwin(height, width, starty, startx);
-	box(local_win, 0 , 0);		
-	wrefresh(local_win);		
-
-	return local_win;
-}
-
-void destroy_win(WINDOW *local_win)
-{	
-	wborder(local_win, ' ', ' ', ' ',' ',' ',' ',' ',' ');
-	wrefresh(local_win);
-	delwin(local_win);
-}
 
 void create_a_frame(){
 	int i;
+	t_mouv* mouv ;
 	new(STRUCT_AVANT);
-	t_mouv* mouv = getmouvs();
+	mouv= getmouvs();
 	for(i=0;i<nb_servo;i++)
 	{	
 		createServoWindow("test",&mouv[i]);

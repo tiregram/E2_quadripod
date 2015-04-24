@@ -3,13 +3,16 @@
 #include <math.h>
 #include <stdlib.h>
 #include <ncurses.h>
+int privFunc_assignValeur(struct input_panel * panel,int ch);
+void privFunc_changeByte(struct input_panel * panel, char ch,int nb);
 
-unsigned long  	privFunc_passArray_To_Char(struct input_panel * panel);
-int assignValeur(struct input_panel * panel,int ch);
-void selectedInput(struct input_panel * panel);
-void	privFunc_passChar_To_Array(struct input_panel * panel);
-void changeByte(struct input_panel * panel,unsigned char ch,int nb);
-void deselectedInput(struct input_panel * panel);
+void privFunc_selectedInput(struct input_panel * panel);
+void privFunc_deselectedInput(struct input_panel * panel);
+
+void privFunc_passArray_To_Char(struct input_panel * panel);
+void privFunc_passChar_To_Array(struct input_panel * panel);
+
+
 struct input_panel * inputSelect_init(unsigned long * pval,int y,int x,unsigned long  min,unsigned long  max,int nbByte){	
 	struct input_panel * locale=NULL;
 	locale= malloc(sizeof(struct input_panel));
@@ -28,7 +31,7 @@ struct input_panel * inputSelect_init(unsigned long * pval,int y,int x,unsigned 
 
 void inputSelect_Actualiser(struct input_panel * panel){
 	int i = 0;
-	unsigned char * tab = panel->tab;
+	char * tab = panel->tab;
 	for(i=0; i<panel->byte; i++){
 		mvwaddch( panel->pos,0,i,(tab[i]+48)| A_BOLD | A_UNDERLINE);
 	}
@@ -52,12 +55,12 @@ void inputSelect_set(struct input_panel * panel ,unsigned long pval){
 void inputSelect_modifInput(struct input_panel * panel){
 	int exit = 1;
 	int ch = '0';
-	selectedInput(panel);
+	privFunc_selectedInput(panel);
 	wmove(panel->pos,0,0);
 	while(exit){
 		ch = wgetch(panel->pos);	
 		if(ch>47 && ch<58){
-			exit = assignValeur(panel,ch);						
+			exit = privFunc_assignValeur(panel,ch);						
 		}else 
 		if(ch == 'q'){
 			exit =0;	
@@ -78,13 +81,17 @@ void inputSelect_modifInput(struct input_panel * panel){
 
 
 	}
-	deselectedInput(panel);
+	privFunc_deselectedInput(panel);
 }
 
-int assignValeur(struct input_panel * panel,int ch){
+
+
+
+
+int privFunc_assignValeur(struct input_panel * panel,int ch){
 	int x,y;
 	getyx(panel->pos,y,x);
-	changeByte(panel,ch,x);	
+	privFunc_changeByte(panel,ch,x);	
 	if(x+1==panel->byte)
 		return 0;		
 	wmove(panel->pos,y,x+1);
@@ -93,46 +100,49 @@ int assignValeur(struct input_panel * panel,int ch){
 }
 
 
-void changeByte(struct input_panel * panel,unsigned char ch,int nb){
+void 	privFunc_changeByte(struct input_panel * panel, char ch,int nb){
 	panel->tab[nb]=ch-48;
-	inputSelect_set(panel,privFunc_passArray_To_Char(panel));
+	privFunc_passArray_To_Char(panel);
+
 
 	waddch( panel->pos,(panel->tab[nb]+48)| A_BOLD | A_UNDERLINE);
 }
 
 
-void selectedInput(struct input_panel * panel){
+void 	privFunc_selectedInput(struct input_panel * panel){
 	wattron(panel->pos,A_REVERSE);
 	inputSelect_Actualiser(panel);
 }
 
-void deselectedInput(struct input_panel * panel){
+void 	privFunc_deselectedInput(struct input_panel * panel){
 	wattroff(panel->pos,A_REVERSE);
 	inputSelect_Actualiser(panel);
 }
 
-void inputSelect_changeCible(struct input_panel * panel , unsigned long * pval){
+void 	inputSelect_changeCible(struct input_panel * panel , unsigned long * pval){
 	panel->val = pval;
 	inputSelect_set(panel,*pval);	
 }
 
 
 
-unsigned long  	privFunc_passArray_To_Char(struct input_panel * panel){
+void 	privFunc_passArray_To_Char(struct input_panel * panel){
 	int i;
-	unsigned char *  tab = panel->tab;
-	unsigned char *  tabTemp = malloc(sizeof(char)*panel->byte);
+	char *  tab = panel->tab;
+	char *  tabTemp = malloc(sizeof(char)*panel->byte);
 	for(i = 0; i<panel->byte;i++)
 		tabTemp[i]=tab[i]+48;
 	
-	unsigned long ret=atol(tabTemp);
-	free(tabTemp);	
-	return ret;
+	inputSelect_set(panel,atol(tabTemp));
+
+	free(tabTemp);
+		
 }
 
 void	privFunc_passChar_To_Array(struct input_panel * panel){
+
 	int i;
-	unsigned char *  tab = panel->tab;
+	char *  tab = panel->tab;
 	for(i = 0; i<panel->byte;i++)
 		tab[i]=(int)((*panel->val)/pow(10,panel->byte-i-1))%10;	
 
