@@ -1,3 +1,5 @@
+#ifndef input_select	 
+#define input_select
 #include <ncurses.h>
 struct input_panel{
 	unsigned long * val;
@@ -13,3 +15,4 @@ void 	inputSelect_modifInput(struct input_panel * panel);
 void 	inputSelect_changeCible(struct input_panel * panel , unsigned long * pval);
 void 	inputSelect_set(struct input_panel * panel ,unsigned long pval);
 void 	inputSelect_Actualiser(struct input_panel * enumvarpanel);
+#endif

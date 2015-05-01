@@ -1,4 +1,5 @@
-
+#ifndef data_struct
+#define data_struct
 struct one_Mouv{
 	unsigned long pin;
 	unsigned long pos;
@@ -10,6 +11,7 @@ struct circular_vector_mouv{
 	struct circular_vector_mouv * next;
 	struct circular_vector_mouv * prev;
 	t_mouv *  mouv;
+	unsigned long delay;
 };
 
 
@@ -27,3 +29,4 @@ void struct_next(circular_vector * this);
 void struct_list(circular_vector * this);
 void struct_set_From_Array(circular_vector * this,unsigned long * pin ,unsigned long * pos);
 void struct_free_circular_vector(circular_vector * this);
+#endif

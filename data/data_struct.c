@@ -1,10 +1,12 @@
+#include <ncurses.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+
 #include "../include/basic.h"
 #include "data_struct.h"
 
-#define out(a) printf(a)
+#define out(a) printw(a)
 
 
 void malloc_a_mouv(struct circular_vector_mouv * prec,struct circular_vector_mouv * suiv);
@@ -35,7 +37,7 @@ void malloc_a_mouv(struct circular_vector_mouv * prec,struct circular_vector_mou
 	struct circular_vector_mouv * theNew;
 	theNew=malloc(sizeof(struct circular_vector_mouv));
 	theNew->mouv = instance_mouvs();	
-
+	theNew->delay= 500;
 	theNew->next = suiv;
 	theNew->prev=prec;
 	prec->next = theNew;
@@ -46,7 +48,7 @@ void malloc_a_mouv(struct circular_vector_mouv * prec,struct circular_vector_mou
 void new_mouvs(char av_ap,struct circular_vector_mouv * mouv){
 	if(av_ap == STRUCT_AVANT){malloc_a_mouv(mouv->prev,mouv);
 	} 
-	else if(av_ap == STRUCT_APRES){malloc_a_mouv(mouv,mouv);
+	else if(av_ap == STRUCT_APRES){malloc_a_mouv(mouv,mouv->next);
 	
 	}
 
@@ -99,9 +101,10 @@ t_mouv * struct_mouv(unsigned long * pin ,unsigned long * pos){
 }
 
 void struct_set_From_Array(circular_vector * this,unsigned long * pin ,unsigned long * pos){
-	t_mouv * loc  = struct_mouv(pin ,pos);
-	struct_set(this,loc);
-
+	for(int i=0;i<nb_servo;i++){
+	this->curent->mouv[i].pin = pin[i];	
+	this->curent->mouv[i].pos = pos[i];	
+	}
 }
 
 

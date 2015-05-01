@@ -3,6 +3,17 @@
 #include <string.h>
 #define nb_servo 8
 
+
+typedef struct{
+	char * dest;
+	int nb_sequence_save;
+	char * save_at;
+} dosier_save; 
+
+
+
+
+
 /*void struct_save(struct circular_vector_mouv * saveThis){
 	if(saveThis!=NULL){
 		int i ;
