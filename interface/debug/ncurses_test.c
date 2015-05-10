@@ -7,8 +7,9 @@
 #include "../../data/data_struct.h"
 #include "../ncurses_MessageBox.h"
 #include "../ncurses_Frame.h"
-
-
+#include "../ncurses_Menu.h"
+#include "../ncurses_ListSequence.h"
+#include "../ncurses_InputString.h"
 void testInputSelect(){
 	unsigned long * var = malloc(sizeof(long));
 	unsigned long * var2 = malloc(sizeof(long));
@@ -81,9 +82,107 @@ void testFrame(){
 	int ch ;
 	keypad(b->scrool, TRUE);		/* We get F1, F2 etc..		*/
 	while('l'!=(ch=wgetch(b->scrool))){
-		frame_action(b,ch);	
+	//	frame_action(b,ch);	
 	}
 	sleep(5);
+}
+
+void testMenu(){
+char *  list[20] = {"Sequence","OpenCV","help","Exit"};
+	menu_panel * a = menu_init(1,1,20,6,list,4);
+	cmd_line * b = cmd_init();
+	int ch = menu_action(a,b);
+if(ch==0){
+char *  list1[20] = {"cree","modifier","suprimer","jouer","ouvrir","sauvegarder","help"};
+	menu_panel * a2 = menu_init(23,1,20,9,list1,7);
+	cmd_line * b2 = cmd_init();
+	menu_action(a2,b2);
+
+}
+}
+
+void testListSeq(){
+	list_sequence * d = sequence_init("one",1,NULL);
+	sequence_add(d,0,"deux",2,NULL);
+	sequence_add(d,0,"trois",3,NULL);
+	sequence_add(d,0,"quat",4,NULL);
+	ncu_sequence * a = ncu_sequence_init(d,1,1,18,10);
+	cmd_line * b = cmd_init();
+	while(ncu_sequence_action(a,b)!=-1);
+	sleep(2);
+}
+
+
+
+
+
+cmd_line * b; 
+menu_panel * a;menu_panel * a1; menu_panel * a2;  
+//sousMenuPrincipal
+void menuInterface1(){
+	menu_refrech(a1);	
+	while(1)
+	switch(menu_action(a1,b)){
+		case 0:
+			break;
+		case 1: 
+		case -1:return;
+			break;
+	}
+
+}
+void menuInterface2(){
+	
+	menu_refrech(a2);	
+
+	while(1)
+	switch(menu_action(a2,b)){
+
+		case 0:
+			break;
+		case 1: 
+		case -1:return;
+			break;
+	}
+}
+
+
+
+//menuPrincipal
+void menuInterface(){
+	b = cmd_init();
+	char *  list[20] = {"Sequence","OpenCV","help","Exit"};
+	a = menu_init(1,1,20,9,list,4);
+	char *  list2[20] = {"openCV","Pas","Encore","fais"};
+	a2 = menu_init(1,1,20,9,list2,4);
+	char *  list1[20] = {"cree","modifier","suprimer","jouer","ouvrir","sauvegarder","help"};
+	a1 = menu_init(1,1,20,9,list1,7);
+
+	menu_refrech(a);
+	while(1)
+	switch(menu_action(a,b)){
+		case 0:
+			menuInterface1();
+			menu_refrech(a);
+			break;
+		case 1: 
+			menuInterface2();
+			menu_refrech(a);
+			break;
+		case -1:return;
+			break;
+	}
+
+}
+
+
+
+void inputString_test(){
+	inputString * a = inputString_init_NewString(10,10,10);
+	cmd_line* b= cmd_init();
+	inputString_action(a,b);
+
+
 }
 
 
@@ -92,8 +191,12 @@ int main (){
 	raw();				/* Line buffering disabled	*/
 	noecho();		/* Don't echo() while we do getch */
 	start_color();
-	testInputSelect();
+	//testInputSelect();
 	//testMessageBox();
-	testServoWindow();
-	//testFrame();
+	//testServoWindow();
+	//testFrame();a
+	//testMenu();
+	//testListSeq();
+	//menuInterface();
+	inputString_test();
 }

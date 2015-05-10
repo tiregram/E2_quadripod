@@ -1,15 +1,13 @@
-#include "interface/ncurses_Interface.h"
-#include "data/data_struct.h"
 #include <unistd.h>
+#include "controller/ctrl_Base.h"
+
 
 int main(){
-	 circular_vector * data = struct_init();	
-	interface_init(data);
-		while(1){
-	
+	int ret;
+	ret = Cbase_init();
+	sleep(2);
+	ret = Cbase_lauch();
 
-	interface_action();
-	}
-	sleep(3);
+	sleep(1);
 	return 0;
 }

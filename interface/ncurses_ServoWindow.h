@@ -16,5 +16,5 @@ typedef struct {
 list_servo * servoWindows_init(int posx , int posy,t_mouv * mouv);
 void servoWindows_refrechWindows( list_servo * servos);
 void  servoWindows_change(list_servo* l_servo,t_mouv * mouv);
-int servoWindows_action(list_servo* this,cmd_line * cmda);
+int servoWindows_action(list_servo*  , cmd_line * cmda);
 #endif
