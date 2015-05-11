@@ -4,6 +4,7 @@
 
 int Cbase_init();
 int Cbase_lauch();
+int Cbase_destr();
 
 #endif
 

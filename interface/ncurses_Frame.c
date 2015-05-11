@@ -6,12 +6,12 @@
 #include "ncurses_ServoWindow.h"
 #include "ncurses_CmdLine.h"
 
-ncu_frame * frame_init(int x,int y,circular_vector* data){
+ncu_frame * frame_init(int x,int y/*,circular_vector* data*/){
 	ncu_frame * this = malloc(sizeof(ncu_frame));
 	this->con = newwin(25,50, y, x);
 
-	this->servo_panel = servoWindows_init(5,5,data->curent->mouv);
-	servoWindows_refrechWindows(this->servo_panel);
+	this->servo_panel = servoWindows_init(25,0);
+	//servoWindows_refrechWindows(this->servo_panel);
 
 	box(this->con, 0 , 0);	
 	wprintw(this->con,"Frame");
@@ -21,9 +21,17 @@ ncu_frame * frame_init(int x,int y,circular_vector* data){
 
 	this->scrool = newwin(19,48,y+5,x+1);
 	
-	this->data = data;
+/*	this->data = data;*/
 	return this;
 }
+
+void frame_change(ncu_frame *this,circular_vector *data){
+		
+	this->data = data;
+}
+
+
+
 
 void renderOneMouv(WINDOW * win, int y,int option,struct circular_vector_mouv * is){
 	wattron(win,option);

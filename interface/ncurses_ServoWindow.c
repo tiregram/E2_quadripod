@@ -7,23 +7,24 @@
 
 
 
-void 	pricFunc_refrechWindow( servo * servo);
-servo * privFunc_new(int x , int y,t_mouv val);
+void 	pricFunc_refrechWindow( ncu_servo * servo);
+ncu_servo * privFunc_new(int x , int y/*,t_mouv val*/);
 void  	pricFunc_destroy_win(WINDOW *local_win);
-void 	privFunc_refrechWindow(servo * servo);
+void 	privFunc_refrechWindow(ncu_servo * servo);
 
 
-list_servo* servoWindows_init(int posx , int posy,t_mouv * mouv){
-	list_servo * locale = malloc(sizeof(list_servo));
+ncu_list_servo* servoWindows_init(int posx , int posy/*,t_mouv * mouv*/){
+	ncu_list_servo * locale = malloc(sizeof(ncu_list_servo));
+	
 	for(int i = 0;i<nb_servo;i++){
-		locale->list[i] = *privFunc_new(posx+1+20*(i%4),posy+1+8*(i/4),mouv[i]); 	
+		locale->list[i] = *privFunc_new(posx+1+20*(i%4),posy+1+8*(i/4)/*,mouv[i]*/); 	
 	}
 	return locale;
 }
 
-void servoWindows_refrechWindows(list_servo * servos){
+void servoWindows_refrechWindows(ncu_list_servo * servos){
 	int i = 0;
-	for(i = 0 ; i<nb_servo ; i++){
+	for(i = 0 ; i<nb_servo;i++){
 		privFunc_refrechWindow(&servos->list[i]);
 	}
 }
@@ -39,20 +40,21 @@ WINDOW * privFunc_create_newwin(int height, int width, int starty, int startx)
 }
 
 
-servo * privFunc_new(int x , int y,t_mouv val){
-	servo * loc=malloc(sizeof(servo));
+ncu_servo * privFunc_new(int x , int y/*,t_mouv val*/){
+	
+	ncu_servo * loc=malloc(sizeof(ncu_servo));
        	loc->win=privFunc_create_newwin(6,20,y,x);
 	getbegyx(loc->win,y,x);
 	wprintw(loc->win," %s","test");
 	mvwprintw(loc->win, 2, 2, "pin:");
 	mvwprintw(loc->win, 4, 2, "pos:");
-	loc->pos = inputSelect_init(&val.pos,y+4,x+9,1,255,3);	
-	loc->pin = inputSelect_init(&val.pin,y+2,x+9,1,20,2);	
+	loc->pos = inputSelect_init(NULL,y+4,x+9,1,255,3);	
+	loc->pin = inputSelect_init(NULL,y+2,x+9,1,20,2);	
 
 	return loc; 
 }
 
-void  servoWindows_change(list_servo* l_servo,t_mouv * mouv){
+void  servoWindows_change(ncu_list_servo* l_servo,t_mouv * mouv){
 	for(int i=0; i<nb_servo;i++)
 	{
 		inputSelect_changeCible(l_servo->list[i].pin,&mouv[i].pin);
@@ -64,7 +66,7 @@ void  servoWindows_change(list_servo* l_servo,t_mouv * mouv){
 }
 
 
-void privFunc_refrechWindow(servo * servo){
+void privFunc_refrechWindow(ncu_servo * servo){
 		wrefresh(servo->win);	
 		inputSelect_Actualiser(servo->pin);
 		inputSelect_Actualiser(servo->pos);	
@@ -77,7 +79,7 @@ void  privFunc_destroy_win(WINDOW *local_win)
 	delwin(local_win);
 }
 
-void privFunc_select(list_servo*this){
+void privFunc_select(ncu_list_servo*this){
 	int a = A_REVERSE;
 	wattron(this->list[this->actual].win,a);
 	box(this->list[this->actual].win, 0 , 0);	
@@ -88,7 +90,7 @@ void privFunc_select(list_servo*this){
 	inputSelect_Actualiser(this->list[this->actual].pin);
 }
 
-void privFunc_deselect(list_servo*this){
+void privFunc_deselect(ncu_list_servo*this){
 	box(this->list[this->actual].win, 0 , 0);		
 	mvwprintw(this->list[this->actual].win,0,0," %s","test");
 	wrefresh(this->list[this->actual].win);
@@ -97,7 +99,7 @@ void privFunc_deselect(list_servo*this){
 	inputSelect_Actualiser(this->list[this->actual].pos);
 }
 
-int servoWindows_action(list_servo* this,cmd_line * cmda){
+int servoWindows_action(ncu_list_servo* this,cmd_line * cmda){
 	privFunc_select(this);
 	int ch = cmd_getCh(cmda);
 	

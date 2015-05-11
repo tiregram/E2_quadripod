@@ -14,17 +14,17 @@ void privFunc_passChar_To_Array(struct input_panel * panel);
 
 
 struct input_panel * inputSelect_init(unsigned long * pval,int y,int x,unsigned long  min,unsigned long  max,int nbByte){	
-	struct input_panel * locale=NULL;
-	locale= malloc(sizeof(struct input_panel));
+	struct input_panel * locale = malloc(sizeof(struct input_panel));
 	locale->tab= malloc(sizeof(char)*nbByte);
 	locale->val=pval;
 	locale->min=min;
 	locale->max=max;		
 	locale->byte=nbByte;
 	locale->pos = newwin(1, nbByte, y, x);
-		
+	if(pval != NULL){	
 	inputSelect_set(locale,*pval);	
 	inputSelect_Actualiser(locale);
+	}
 	return locale;
 }
 

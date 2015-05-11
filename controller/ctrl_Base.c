@@ -53,5 +53,15 @@ int Cbase_init(){
 	seqa = sequence_init();
 	
 	Cseq_init();
+	return 0;
 	
+}
+
+
+int Cbase_destr(){
+	echo();
+	noraw();
+	endwin();	
+	return 0;
+
 }

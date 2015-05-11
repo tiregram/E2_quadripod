@@ -6,7 +6,7 @@ NCURSES = -lncurses
 COLOR = -fdiagnostics-color=auto
 
 DATA      = data_struct.o data_modelFile.o data_modelUart.o data_Sequence.o data_ListMenu.o
-INTERFACE = ncurses_Interface.o ncurses_inputSelect.o ncurses_ServoWindow.o ncurses_MessageBox.o ncurses_Frame.o ncurses_CmdLine.o ncurses_Menu.o ncurses_ListSequence.o ncurses_inputString.o
+INTERFACE =  ncurses_inputSelect.o ncurses_ServoWindow.o ncurses_MessageBox.o ncurses_Frame.o ncurses_CmdLine.o ncurses_Menu.o ncurses_ListSequence.o ncurses_inputString.o
 CTRL 	  = ctrl_Base.o ctrl_Sequence.o
 
 all: princ

@@ -1,13 +1,15 @@
 #include "../include/ctrl.h"
 #include "../interface/ncurses_CmdLine.h"
 #include "../interface/ncurses_Menu.h"
+#include "../interface/ncurses_Frame.h"
 
 #include "../interface/ncurses_ListSequence.h"
 #include "../data/data_ListMenu.h"
 
 menu_panel * menu_seq;
-
 ncu_sequence * interface_seq;
+ncu_list_servo * serv;
+ncu_frame * frame;
 
 int Cseq_init(){
 	char** menu= menu_list_init(20,8);
@@ -19,17 +21,13 @@ int Cseq_init(){
 	menu[5] ="sauvegarder";
 	menu[6] ="help";
 	menu_seq = menu_init(1,1,20,9,menu,7);
-	interface_seq = ncu_sequence_init(seqa,1,10,20,30);	
-		
-	
-
-
-
-}
-
+	interface_seq = ncu_sequence_init(seqa,1,10,20,30);
+	frame = frame_init(24,15);
+	}
 
 
 int Cseq_lauch(){
+
 	menu_refrech(menu_seq);	
 	while(1)
 	switch(menu_action(menu_seq,cmda)){
@@ -37,6 +35,7 @@ int Cseq_lauch(){
 		ncu_sequence_new_elem(interface_seq,cmda);
 			break;
 		case 1: 
+
 			break;
 		case 2:
 			ncu_sequence_action(interface_seq,cmda);

@@ -12,7 +12,7 @@
 
 
 cmd_line  * cmda;
-list_servo * servo_panel;
+ncu_list_servo * servo_panel;
 MessBox* messa_panel;
 ncu_frame* frame_panel;
 

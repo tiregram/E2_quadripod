@@ -5,9 +5,7 @@
 int main(){
 	int ret;
 	ret = Cbase_init();
-	sleep(2);
 	ret = Cbase_lauch();
-
-	sleep(1);
+	ret = Cbase_destr();
 	return 0;
 }
