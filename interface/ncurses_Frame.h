@@ -13,4 +13,5 @@ typedef struct {
 ncu_frame * frame_init(int x,int y/*,circular_vector* data*/);
 void frame_refrechlist(ncu_frame* this);
 int frame_action(ncu_frame* this,cmd_line * cmda);
+void frame_change(ncu_frame *this,circular_vector *data);
 #endif

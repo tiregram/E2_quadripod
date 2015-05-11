@@ -29,6 +29,11 @@ int Cbase_lauch(){
 		case 1: 
 			menu_refrech(menu_base);
 			break;
+		case  2: 
+			break;
+		case 3: 
+			return 0;
+			break;
 		case -1:return 0;
 			break;
 	}

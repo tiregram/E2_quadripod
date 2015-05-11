@@ -15,7 +15,6 @@ ncu_sequence * ncu_sequence_init(list_sequence * listSeq,int startX, int startY,
 	box(this->win,0,0);
 	ncu_sequence_refrech(this);
 
-
 	this->inpStr = inputString_init(startX,startY+sizeY-1,10); 
 	return this;
 }
@@ -46,10 +45,10 @@ void ncu_sequence_refrech(ncu_sequence * this){
 	wrefresh(this->win);
 }
 
-
+/*
 void ncu_sequence_deplacement(ncu_sequence * this ,char sens){
 		
-}
+}*/
 
 int ncu_sequence_action(ncu_sequence * this, cmd_line * cmda){
 
@@ -104,11 +103,9 @@ void  ncu_sequence_new_elem(ncu_sequence * this,cmd_line * cmda){
 
 
  
-void  ncu_sequence_del(ncu_sequence * this,cmd_line * cmda){
+void  ncu_sequence_del(ncu_sequence * this){
 	if(this->seq->first == NULL)
 		return;
-
-
 	sequence_del(this->seq);
 	ncu_sequence_refrech(this);	
 

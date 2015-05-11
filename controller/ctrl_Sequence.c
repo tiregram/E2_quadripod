@@ -23,6 +23,7 @@ int Cseq_init(){
 	menu_seq = menu_init(1,1,20,9,menu,7);
 	interface_seq = ncu_sequence_init(seqa,1,10,20,30);
 	frame = frame_init(24,15);
+	return 0;
 	}
 
 
@@ -35,11 +36,22 @@ int Cseq_lauch(){
 		ncu_sequence_new_elem(interface_seq,cmda);
 			break;
 		case 1: 
-
+		if(seqa->first == NULL)
+			break;
+		if(seqa->curent == NULL)
+			break;
+	
+		ncu_sequence_action(interface_seq,cmda);
+		frame_change(frame,seqa->curent->seq);
+		frame_action(frame,cmda);	
+			
+		
+		
+		
 			break;
 		case 2:
 			ncu_sequence_action(interface_seq,cmda);
-			ncu_sequence_del(interface_seq,cmda);
+			ncu_sequence_del(interface_seq);
 			break;
 		case -1:return 0;
 			break;

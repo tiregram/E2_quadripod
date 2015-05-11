@@ -17,12 +17,13 @@ menu_panel* menu_init(int startX, int startY, int sizeX,int  sizeY,char * *menu,
 void menu_refrech(menu_panel * this){
 	int sizeY,sizeX;
 	getmaxyx(this->win,sizeY,sizeX);
-	for(int i =0 ; i<this->nb_choix;i++){
+	for(unsigned int i =0 ; i<this->nb_choix;i++){
 		mvwprintw(this->win,i+1,2,"%1i >",i+1);
 		mvwprintw(this->win,i+1,6,"%s",this->list[i]);
 		mvwprintw(this->win,i+1,sizeX-3,"<");
 			
 	}
+	sizeY = sizeY;
 	redrawwin(this->win);	
 }
 

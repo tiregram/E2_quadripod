@@ -19,7 +19,7 @@ int ncu_sequence_action(ncu_sequence * this, cmd_line * cmda);
 
 void  ncu_sequence_new_elem(ncu_sequence * this,cmd_line * cmda);
 
-void  ncu_sequence_del(ncu_sequence * this,cmd_line * cmda);
+void  ncu_sequence_del(ncu_sequence * this);
 
 
 #endif

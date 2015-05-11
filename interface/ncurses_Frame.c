@@ -17,25 +17,24 @@ ncu_frame * frame_init(int x,int y/*,circular_vector* data*/){
 	wprintw(this->con,"Frame");
 	mvwhline(this->con,4 ,1,' '|A_REVERSE,48);
 	mvwhline(this->con,23 ,1,' '|A_REVERSE,48);
-	wrefresh(this->con);
 
 	this->scrool = newwin(19,48,y+5,x+1);
 	
-/*	this->data = data;*/
 	return this;
 }
 
 void frame_change(ncu_frame *this,circular_vector *data){
-		
+	werase(this->scrool);
+	servoWindows_change(this->servo_panel ,data->curent->mouv);	
 	this->data = data;
 }
 
 
 
 
-void renderOneMouv(WINDOW * win, int y,int option,struct circular_vector_mouv * is){
+void renderOneMouv(WINDOW * win, int y,int option,struct circular_vector_mouv * is,char * text){
 	wattron(win,option);
-	mvwprintw( win,y,1,"=>|%3i|%3i|%3i|%3i|%3i|%3i|%3i|%3i|a%i",
+	mvwprintw( win,y,1,"=>|%3i|%3i|%3i|%3i|%3i|%3i|%3i|%3i|a%s",
 			is->mouv[0].pos,
 			is->mouv[1].pos,
 			is->mouv[2].pos,
@@ -44,17 +43,19 @@ void renderOneMouv(WINDOW * win, int y,int option,struct circular_vector_mouv * 
 			is->mouv[5].pos,
 			is->mouv[6].pos,
 			is->mouv[7].pos,
-			is
+			text
 			);
 	wattroff(win,option);
 }
+
+
 
 
 void frame_refrechlist(ncu_frame* this){	
 	int x,y;
 	struct 	circular_vector_mouv*  stop = this->data->curent;
 	getmaxyx(this->scrool,y,x);
-	renderOneMouv(this->scrool,y/2,A_REVERSE,stop);
+	renderOneMouv(this->scrool,y/2,A_REVERSE,stop,"frame");
 	struct 	circular_vector_mouv* pr = stop->prev;
 	struct 	circular_vector_mouv* nx = stop->next;
 	int i= 1;
@@ -62,14 +63,14 @@ void frame_refrechlist(ncu_frame* this){
 
 
 		if(nx==this->data->first)
-			renderOneMouv(this->scrool,y/2+i,A_UNDERLINE |A_NORMAL,nx);
+			renderOneMouv(this->scrool,y/2+i,A_UNDERLINE |A_NORMAL,nx,"frame");
 		else 
-			renderOneMouv(this->scrool,y/2+i,A_NORMAL,nx);
+			renderOneMouv(this->scrool,y/2+i,A_NORMAL,nx,"frame");
 		
 		if(pr==this->data->first)
-			renderOneMouv(this->scrool,y/2-i,A_UNDERLINE|A_NORMAL,pr);
+			renderOneMouv(this->scrool,y/2-i,A_UNDERLINE|A_NORMAL,pr,"frame");
 		else 
-			renderOneMouv(this->scrool,y/2-i,A_NORMAL,pr);
+			renderOneMouv(this->scrool,y/2-i,A_NORMAL,pr,"frame");
 
 		pr = pr->prev;
 		nx = nx->next;	
@@ -84,6 +85,11 @@ void frame_refrechlist(ncu_frame* this){
 
 //action 0 no refrech| 1 refrech | 2 refrech|
 int frame_action(ncu_frame* this,cmd_line* cmda){
+
+	servoWindows_refrechWindows(this->servo_panel);	
+	while(1){
+	frame_refrechlist(this);
+
 	int action= cmd_getCh(cmda); 	
 	switch(action){
 		case 'q':
@@ -111,7 +117,7 @@ int frame_action(ncu_frame* this,cmd_line* cmda){
 				
 			break;
 	}
-	frame_refrechlist(this);
+	}
 	return 1;
 }
 
