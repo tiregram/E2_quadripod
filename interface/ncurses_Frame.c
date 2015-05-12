@@ -17,7 +17,8 @@ ncu_frame * frame_init(int x,int y/*,circular_vector* data*/){
 	wprintw(this->con,"Frame");
 	mvwhline(this->con,4 ,1,' '|A_REVERSE,48);
 	mvwhline(this->con,23 ,1,' '|A_REVERSE,48);
-
+	
+	this->delay_panel = inputSelect_init(NULL,y+5+9,x+18,100,999999,6);
 	this->scrool = newwin(19,48,y+5,x+1);
 	
 	return this;
@@ -27,6 +28,7 @@ void frame_change(ncu_frame *this,circular_vector *data){
 	werase(this->scrool);
 	servoWindows_change(this->servo_panel ,data->curent->mouv);	
 	this->data = data;
+
 }
 
 
@@ -34,16 +36,9 @@ void frame_change(ncu_frame *this,circular_vector *data){
 
 void renderOneMouv(WINDOW * win, int y,int option,struct circular_vector_mouv * is,char * text){
 	wattron(win,option);
-	mvwprintw( win,y,1,"=>|%3i|%3i|%3i|%3i|%3i|%3i|%3i|%3i|a%s",
-			is->mouv[0].pos,
-			is->mouv[1].pos,
-			is->mouv[2].pos,
-			is->mouv[3].pos,
-			is->mouv[4].pos,
-			is->mouv[5].pos,
-			is->mouv[6].pos,
-			is->mouv[7].pos,
-			text
+	mvwprintw( win,y,1,"=>a%s| delay %6u",
+			text,
+			is->delay
 			);
 	wattroff(win,option);
 }
@@ -77,10 +72,16 @@ void frame_refrechlist(ncu_frame* this){
 		i=i+1;		
 	}
 	mvwprintw(this->con,2,2,"nb of Frame %3i",(i-1)*2+1);
-	wrefresh(this->scrool);
 	wrefresh(this->con);
-
+	wrefresh(this->scrool);
 }
+
+void frame_change_delay(ncu_frame* this){
+	inputSelect_changeCible(this->delay_panel,&this->data->curent->delay);	
+	inputSelect_modifInput(this->delay_panel);	
+}
+
+
 
 
 //action 0 no refrech| 1 refrech | 2 refrech|
@@ -97,17 +98,22 @@ int frame_action(ncu_frame* this,cmd_line* cmda){
 			break;
 		case KEY_UP:
 			this->data->curent= this->data->curent->prev;
+		//	inputSelect_changeCible(this->delay_panel,&this->data->curent->delay);
 			servoWindows_change(this->servo_panel,this->data->curent->mouv);
 			servoWindows_refrechWindows(this->servo_panel);	
 			break;
 		case KEY_DOWN:
 			this->data->curent= this->data->curent->next;
+		//	inputSelect_changeCible(this->delay_panel,&this->data->curent->delay);
 			servoWindows_change(this->servo_panel,this->data->curent->mouv);
 			servoWindows_refrechWindows(this->servo_panel);	
 			break;
 		case 'n':
 			struct_new(this->data,STRUCT_AVANT);
 			
+			break;
+		case 'd':
+			frame_change_delay(this);		
 			break;
 		case 'e':
 
@@ -120,6 +126,8 @@ int frame_action(ncu_frame* this,cmd_line* cmda){
 	}
 	return 1;
 }
+
+
 
 char * getKey(){
 	return "UP: move up, DOWN: move DOWN, r: refresh, n: new";

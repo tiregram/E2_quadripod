@@ -3,12 +3,14 @@
 
 #include <ncurses.h>
 #include "../data/data_struct.h"
+#include "ncurses_inputSelect.h"
 #include "ncurses_ServoWindow.h"
 typedef struct {
 	WINDOW * con;
 	WINDOW * scrool;
 	ncu_list_servo * servo_panel;
 	circular_vector* data;
+	struct input_panel* delay_panel;
 } ncu_frame;
 ncu_frame * frame_init(int x,int y/*,circular_vector* data*/);
 void frame_refrechlist(ncu_frame* this);
