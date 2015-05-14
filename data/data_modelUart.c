@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "data_struct.h"
+#include "data_Sequence.h"
 #include "../include/basic.h"
 #include "data_modelUart.h"
 #include <fcntl.h>
@@ -96,42 +97,11 @@ set_blocking (int fd, int should_block)
 }
 
 
-// nepta define la fonction void (*varname)(uar_instancez*, struct circular_...);
-void uart_sendOneFrame(uart_instance * this,struct circular_vector_mouv * mouv){
-	char  a[20];	
-	write (this->file, "F", 1);
-
-	sprintf(a,"%ld",mouv->delay);
-	write (this->file, a, strlen(a));
-
-	write (this->file, "P", 1);
-
-	write (this->file,a,6);
-	for(int i= 0;i <nb_servo;i++){
-
-		sprintf(a,"%2ld%3ld",mouv->mouv[i].pin,mouv->mouv[i].pos);
-		write (this->file, "a",5); 
-	}
-	write (this->file, "#", 1);
-
-}
-
-
-void uart_sendAllFrame(uart_instance * this ,circular_vector * sequence){
-	struct circular_vector_mouv * first =sequence->first;
-	uart_sendOneFrame(this,first);
-	struct circular_vector_mouv * ite = first->next;
-	while(ite!=first){
-		uart_sendOneFrame(this,ite);
-		ite = first->next;
-	}
-}
-
 
 int uart_sendNew(uart_instance * this, circular_vector * sequence){
 	char a[3];
-	write (this->file, "N", 1);
-	uart_sendAllFrame(this,sequence);
+	write (this->file, "C", 1);
+	sequence_export_command_all(this->file,sequence);
 	write (this->file, "$", 1);
 	read(this->file,a,2);
 	return atoi(a);
@@ -142,15 +112,15 @@ void uart_sendModif(uart_instance * this, circular_vector * sequence,int indice)
 	char a[3];
 	sprintf(a,"%i",indice);
 	write(this->file, a, 2);
-	uart_sendAllFrame(this,sequence);
+	sequence_export_command_all(this->file,sequence);
 	write (this->file, "$", 1);
 }
 
 void uart_sendJouer(uart_instance * this , int indice){
 	write (this->file, "J", 1);
 	char a[3];
-	sprintf(a,"%i",indice);
-	write(this->file, a, 2);
+	sprintf(a,"%2i\n",indice);
+	write(this->file, a, 3);
 }
 
 

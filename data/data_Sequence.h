@@ -1,5 +1,5 @@
-#ifndef sequence
-#define sequence 
+#ifndef sequence_initclude
+#define sequence_initclude
 #include "data_struct.h"
 
 #define sequence_vide_oui 1
@@ -39,6 +39,9 @@ void sequence_add(list_sequence * this,char atend,char * name,int num ,circular_
 
 void sequence_deplacement(list_sequence * this , int sens);
 void sequence_del(list_sequence * this);
+
+void sequence_export_command_all(int file_dest ,circular_vector * seque);
+void sequence_export_command_one(int  file_dest,struct circular_vector_mouv * mouv);
 //void Sequence_add();
 //void Sequence_del();
 //void Sequence_modif();

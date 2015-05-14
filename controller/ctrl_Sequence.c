@@ -5,11 +5,15 @@
 
 #include "../interface/ncurses_ListSequence.h"
 #include "../data/data_ListMenu.h"
+#include "../data/data_modelUart.h"
 
 menu_panel * menu_seq;
 ncu_sequence * interface_seq;
 ncu_list_servo * serv;
 ncu_frame * frame;
+
+
+uart_instance * uart_evalbot;
 
 int Cseq_init(){
 	char** menu= menu_list_init(20,8);
@@ -20,6 +24,7 @@ int Cseq_init(){
 	menu[4] ="ouvrir";
 	menu[5] ="sauvegarder";
 	menu[6] ="help";
+	uart_evalbot =  init_uart("/dev/ttyUSB0");
 	menu_seq = menu_init(1,1,20,9,menu,7);
 	interface_seq = ncu_sequence_init(seqa,1,10,20,30);
 	frame = frame_init(24,15);
@@ -40,6 +45,7 @@ int Cseq_lauch(){
 			break;
 		if(seqa->curent == NULL)
 			break;
+		
 	
 		ncu_sequence_action(interface_seq,cmda);
 		frame_change(frame,seqa->curent->seq);
@@ -53,6 +59,11 @@ int Cseq_lauch(){
 			ncu_sequence_action(interface_seq,cmda);
 			ncu_sequence_del(interface_seq);
 			break;
+		case 3:
+			ncu_sequence_action(interface_seq,cmda);
+			int i = uart_sendNew(uart_evalbot,seqa->curent->seq);
+			uart_sendJouer(uart_evalbot,i);	
+				break;		
 		case -1:return 0;
 			break;
 	}

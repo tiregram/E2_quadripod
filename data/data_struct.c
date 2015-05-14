@@ -7,6 +7,7 @@
 #include "data_struct.h"
 
 #define out(a) printw(a)
+#define PIN_INIT  {1,2,3,4,11,12,13,14}
 
 
 void malloc_a_mouv(struct circular_vector_mouv * prec,struct circular_vector_mouv * suiv);
@@ -25,9 +26,10 @@ circular_vector *  struct_init(){
 
 t_mouv* instance_mouvs(){
 	int i;
+	int  pinInit[nb_servo] = PIN_INIT;
 	t_mouv * mouvs = malloc(sizeof(t_mouv)*nb_servo);	
 	for(i=0;i<nb_servo;i++){
-		mouvs[i].pin = i;
+		mouvs[i].pin =pinInit[i];
 		mouvs[i].pos = 127;
 	}
 	return mouvs;
@@ -79,7 +81,7 @@ void struct_list(circular_vector * this ){
 		printf("Element n*%i\n",nb++);	
 		a[0] =0;
 		for(int j = 0; j<nb_servo;j++){
-			sprintf(a,"=> pin=%3i | pin=%2i \n",i->mouv[j].pin,i->mouv[j].pos);
+			sprintf(a,"=> pin=%3lu | pin=%2lu \n",i->mouv[j].pin,i->mouv[j].pos);
 			out(a);}
 		i = i->next;
 	}while(i!=this->curent);

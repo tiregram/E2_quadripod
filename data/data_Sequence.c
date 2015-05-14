@@ -1,12 +1,13 @@
 #include "data_Sequence.h"
+#include "../include/basic.h"
 #include <stdlib.h>
 #include <string.h>
-
+#include <stdio.h>
+#include <unistd.h>
 
 
 list_sequence * sequence_init(){
 	list_sequence* 	this = malloc(sizeof(list_sequence));
-	sequenc*  	first = malloc(sizeof(sequenc));
 
 	this->nb_total=0;
 	this->first = NULL;
@@ -104,12 +105,12 @@ void sequence_del_by_name(list_sequence * this, char * name){
 
 }
 
-void sequence_del_by_num(list_sequence * this,int num){
+/*void sequence_del_by_num(list_sequence * this,int num){
 
 
 
 
-}
+}*/
 
 void sequence_deplacement(list_sequence * this , int sens){
 
@@ -176,6 +177,43 @@ void sequence_del(list_sequence * this){
 	sequence_free(seqAdel);	
 	this->nb_total -= 1;
 }
+
+
+// nepta define la fonction void (*varname)(uar_instancez*, struct circular_...);
+void sequence_export_command_one(int  file_dest,struct circular_vector_mouv * mouv){
+	char  a[20];	
+	write (file_dest, "F", 1);
+
+	sprintf(a,"%ld",mouv->delay);
+	write (file_dest, a, strlen(a));
+
+	write (file_dest, "P", 1);
+
+	write (file_dest,a,6);
+	for(int i= 0;i <nb_servo;i++){
+
+		sprintf(a,"%2ld%3ld",mouv->mouv[i].pin,mouv->mouv[i].pos);
+		write (file_dest, "a",5); 
+	}
+	write (file_dest, "#", 1);
+
+}
+
+
+
+
+
+void sequence_export_command_all(int file_dest ,circular_vector * seque){
+	struct circular_vector_mouv * first =seque->first;
+	sequence_export_command_one(file_dest,first);
+	struct circular_vector_mouv * ite = first->next;
+	while(ite!=first){
+		sequence_export_command_one(file_dest,ite);
+		ite = first->next;
+	}
+}
+
+
 
 
 
