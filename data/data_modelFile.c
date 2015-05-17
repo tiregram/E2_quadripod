@@ -75,32 +75,35 @@ char *	file_charge(file_struct * this,list_sequence * seq){
 	do{
 		file_read(this,10);
 		strncpy(name,this->dataRead->cont,10);
-		name[10]='\n';
+		name[10]='\0';
+		cv  =  struct_init_empty();	
 		do{	
-			cv  =  struct_init_empty();	
 			file_read(this,1);
+
 			if(this->dataRead->cont[0]!='F'){
 				printw("no F");
-			refresh();
+				refresh();
 				return NULL;}
+
 			file_read(this,7);
-			delay = strtoul(this->dataRead->cont,NULL,0);
+			delay = strtoul(this->dataRead->cont,NULL,10);
 			file_read(this,1);
+
 			if(this->dataRead->cont[0]!='P'){
 				printw("no P");			
-			refresh();
+				refresh();
 				return NULL;}
 
 
 			for(int i = 0 ; i<nb_servo;i++){
 				file_read(this,2);
-				pin[i] = strtoul(this->dataRead->cont,NULL,0);
+				pin[i] = strtoul(this->dataRead->cont,NULL,10);
 
 				file_read(this,3);
-				pos[i] = strtoul(this->dataRead->cont,NULL,0);
+				pos[i] = strtoul(this->dataRead->cont,NULL,10);
 			}
 			struct_create_From_Array(cv,pin,pos,delay);
-			
+
 			file_read(this,1);
 			if(this->dataRead->cont[0]=='#'){
 				nostop = 1;	
@@ -108,15 +111,15 @@ char *	file_charge(file_struct * this,list_sequence * seq){
 				nostop = 0;
 			}else{
 				printw("no stop");			
-			refresh();
+				refresh();
 				return NULL;
 			}
-							
-		}while(nostop);
-			
-		sequence_add(seq,SEQUENCE_AT_CURENT_A,name,-1,cv);
 
-		
+		}while(nostop);
+
+		sequence_add(seq,SEQUENCE_AT_END,name,-1,cv);
+
+
 
 		file_read(this,1);
 		if(this->dataRead->cont[0]=='S'){
@@ -130,9 +133,8 @@ char *	file_charge(file_struct * this,list_sequence * seq){
 		}
 	}while(nostop);
 
-	seq->last = seq->curent;	
 	seq->curent = seq->first;
-		
+
 
 	strcpy(ret,"Chargement ok");
 	return ret;

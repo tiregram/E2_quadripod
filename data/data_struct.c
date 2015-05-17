@@ -54,10 +54,16 @@ void malloc_a_mouv(struct circular_vector_mouv * prec,struct circular_vector_mou
 }
 
 
-void new_mouvs(char av_ap,struct circular_vector_mouv * mouv){
-	if(av_ap == STRUCT_AVANT){malloc_a_mouv(mouv->prev,mouv);
+void new_mouvs(char av_ap, circular_vector * mouv){
+	if(av_ap == STRUCT_AVANT){malloc_a_mouv(mouv->curent->prev,mouv->curent);
 	} 
-	else if(av_ap == STRUCT_APRES){malloc_a_mouv(mouv,mouv->next);
+	else if(av_ap == STRUCT_APRES){malloc_a_mouv(mouv->curent,mouv->curent->next);
+	}
+	else if(av_ap == STRUCT_END){
+		malloc_a_mouv(mouv->first->prev,mouv->first);
+	}else if(av_ap == STRUCT_BEGIN){
+		malloc_a_mouv(mouv->first->prev,mouv->first);
+		mouv->first = mouv->first->prev;
 	}
 
 
@@ -76,7 +82,7 @@ void struct_new(circular_vector * this,char av_ap){
 		this->first = theNew;	
 		return;	
 	}
-	new_mouvs(av_ap,this->curent);
+	new_mouvs(av_ap,this);
 }
 void struct_next(circular_vector * this){
 	this->curent = this->curent->next;
@@ -129,9 +135,8 @@ void struct_set_From_Array(circular_vector * this,unsigned long * pin ,unsigned 
 }
 
 void struct_create_From_Array(circular_vector * this,unsigned long * pin ,unsigned long * pos,unsigned long delay){
-	struct_new(this,STRUCT_APRES);	
-	struct_next(this);
-	struct_set_From_Array(  this, pin , pos, delay);
+	struct_new(this,STRUCT_END);
+	struct_set_From_Array(this, pin , pos, delay);
 }
 
 
