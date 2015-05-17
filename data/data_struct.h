@@ -23,10 +23,12 @@ typedef struct {
 
 
 circular_vector * struct_init();
+circular_vector * struct_init_empty();
 void struct_new(circular_vector * this,char av_ap);
 void struct_prev(circular_vector * this);
 void struct_next(circular_vector * this);
 void struct_list(circular_vector * this);
-void struct_set_From_Array(circular_vector * this,unsigned long * pin ,unsigned long * pos);
+void struct_set_From_Array(circular_vector * this,unsigned long * pin ,unsigned long * pos,unsigned long delay);
 void struct_free_circular_vector(circular_vector * this);
+void struct_create_From_Array(circular_vector * this,unsigned long * pin ,unsigned long * pos,unsigned long delay);
 #endif

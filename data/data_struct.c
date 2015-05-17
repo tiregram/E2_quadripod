@@ -23,6 +23,13 @@ circular_vector *  struct_init(){
 	return this;
 }
 
+circular_vector * struct_init_empty(){
+	circular_vector * this 	= malloc(sizeof(circular_vector));	
+	this->first 		= NULL; 
+	this->curent		= NULL;
+	return this;	
+}
+
 
 t_mouv* instance_mouvs(){
 	int i;
@@ -51,13 +58,24 @@ void new_mouvs(char av_ap,struct circular_vector_mouv * mouv){
 	if(av_ap == STRUCT_AVANT){malloc_a_mouv(mouv->prev,mouv);
 	} 
 	else if(av_ap == STRUCT_APRES){malloc_a_mouv(mouv,mouv->next);
-	
 	}
 
 
 } 
 
 void struct_new(circular_vector * this,char av_ap){
+	if(this->first == NULL){
+		struct circular_vector_mouv * theNew;
+		theNew=malloc(sizeof(struct circular_vector_mouv));
+		theNew->mouv = instance_mouvs();	
+		theNew->delay= 500;
+		theNew->next = theNew;
+		theNew->prev = theNew;
+		
+		this->curent = theNew;
+		this->first = theNew;	
+		return;	
+	}
 	new_mouvs(av_ap,this->curent);
 }
 void struct_next(circular_vector * this){
@@ -102,12 +120,21 @@ t_mouv * struct_mouv(unsigned long * pin ,unsigned long * pos){
 	return ret;
 }
 
-void struct_set_From_Array(circular_vector * this,unsigned long * pin ,unsigned long * pos){
+void struct_set_From_Array(circular_vector * this,unsigned long * pin ,unsigned long * pos,unsigned long delay){
+	this->curent->delay = delay;
 	for(int i=0;i<nb_servo;i++){
 	this->curent->mouv[i].pin = pin[i];	
 	this->curent->mouv[i].pos = pos[i];	
 	}
 }
+
+void struct_create_From_Array(circular_vector * this,unsigned long * pin ,unsigned long * pos,unsigned long delay){
+	struct_new(this,STRUCT_APRES);	
+	struct_next(this);
+	struct_set_From_Array(  this, pin , pos, delay);
+}
+
+
 
 
 
@@ -126,3 +153,7 @@ void struct_free_circular_vector(circular_vector * this ){
 	}while(this->first!=s);
 	free(this);	
 }
+
+
+
+

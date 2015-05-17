@@ -28,21 +28,22 @@ void ncu_sequence_refrech(ncu_sequence * this){
 	mvwprintw(this->win,1,1,"%11s|%2s|S","name","n°");
 	wattroff(this->win,A_UNDERLINE);
 	if(this->seq->first != NULL){	
-	for(unsigned int i = 0; i<this->seq->nb_total;i++){
-		
+	int i = 0;	
+	do{	
 		if(this->seq->curent == a )
 			wattron(this->win,A_REVERSE);
 
-		mvwprintw(this->win,i+2,1,">%10s|%2i|%c",a->name,a->num,(a->send==1)?'x':' ');
+		mvwprintw(this->win,(i++)+2,1,">%10s|%2i|%c",a->name,a->num,(a->send==1)?'x':' ');
 			
 		if(this->seq->curent == a )
 			wattroff(this->win,A_REVERSE);
 
 
 		a = a->next;
-	}	
-	}
+	}while(a !=NULL);	
+	
 	wrefresh(this->win);
+}
 }
 
 /*

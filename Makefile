@@ -77,3 +77,9 @@ clean:
 	@rm -rf *.o
 	@rm -rf lauch
 	@rm -rf lauch-debug
+	@echo "the project is clean"
+
+cleanSave:
+	@rm  	/tmp/lap.save
+	@touch 	/tmp/lap.save
+	@echo "all saves are clean"

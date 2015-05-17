@@ -13,11 +13,6 @@ ncu_frame * frame_init(int x,int y/*,circular_vector* data*/){
 	this->servo_panel = servoWindows_init(25,0);
 	//servoWindows_refrechWindows(this->servo_panel);
 
-	box(this->con, 0 , 0);	
-	wprintw(this->con,"Frame");
-	mvwhline(this->con,4 ,1,' '|A_REVERSE,48);
-	mvwhline(this->con,23 ,1,' '|A_REVERSE,48);
-	
 	this->delay_panel = inputSelect_init(NULL,y+5+9,x+18,100,999999,6);
 	this->scrool = newwin(19,48,y+5,x+1);
 	
@@ -80,13 +75,30 @@ void frame_change_delay(ncu_frame* this){
 	inputSelect_changeCible(this->delay_panel,&this->data->curent->delay);	
 	inputSelect_modifInput(this->delay_panel);	
 }
+ 
+void frame_hide(ncu_frame * this){
+	wclear(this->scrool);
+	wclear(this->con);
+	wrefresh(this->scrool);
+	wrefresh(this->con);
+	servoWindows_hide(this->servo_panel);
+}
 
+void frame_show(ncu_frame * this){
+	box(this->con, 0 , 0);	
+	wprintw(this->con,"Frame");
+	mvwhline(this->con,4 ,1,' '|A_REVERSE,48);
+	mvwhline(this->con,23 ,1,' '|A_REVERSE,48);
+	servoWindows_show(this->servo_panel);	
+	wrefresh(this->con);
+	wrefresh(this->scrool);
+}
 
 
 
 //action 0 no refrech| 1 refrech | 2 refrech|
 int frame_action(ncu_frame* this,cmd_line* cmda){
-
+	frame_show(this);
 	servoWindows_refrechWindows(this->servo_panel);	
 	while(1){
 	frame_refrechlist(this);
@@ -94,6 +106,7 @@ int frame_action(ncu_frame* this,cmd_line* cmda){
 	int action= cmd_getCh(cmda); 	
 	switch(action){
 		case 'q':
+			frame_hide(this);
 			return 0;
 			break;
 		case KEY_UP:

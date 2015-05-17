@@ -17,4 +17,7 @@ ncu_list_servo * servoWindows_init(int posx , int posy/*,t_mouv * mouv*/);
 void servoWindows_refrechWindows( ncu_list_servo * servos);
 void  servoWindows_change(ncu_list_servo* l_servo,t_mouv * mouv);
 int servoWindows_action(ncu_list_servo*  , cmd_line * cmda);
+
+void servoWindows_hide(ncu_list_servo * this);
+void servoWindows_show(ncu_list_servo * this);
 #endif

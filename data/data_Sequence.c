@@ -6,6 +6,8 @@
 #include <unistd.h>
 
 
+void sequence_tool_replace(char * replace,char when,char by);
+
 list_sequence * sequence_init(){
 	list_sequence* 	this = malloc(sizeof(list_sequence));
 
@@ -30,7 +32,8 @@ list_sequence * sequence_init(){
 void sequence_add(list_sequence * this,char atPos,char * name,int num ,circular_vector * cir){
 	sequenc* new = malloc(sizeof(sequenc));
 	this->nb_total += 1;
-	new->name = name;
+	new->name = malloc(sizeof(char)*11);
+	strcpy(new->name,name);
 	new->num  = num;
 	new->send = 0;
 
@@ -38,9 +41,10 @@ void sequence_add(list_sequence * this,char atPos,char * name,int num ,circular_
 		new->seq = cir;
 	else 
 		new->seq = struct_init();
-
+	
+	if(this->first == this->last&&(atPos == SEQUENCE_AT_CURENT_P || atPos == SEQUENCE_AT_CURENT_A ))
+		atPos= (SEQUENCE_AT_CURENT_P==atPos)?SEQUENCE_AT_BEGIN:SEQUENCE_AT_END;	
 	if(this->first == this->curent && atPos == SEQUENCE_AT_CURENT_P ){atPos = SEQUENCE_AT_BEGIN;}
-
 	if(this->last == this->curent && atPos == SEQUENCE_AT_CURENT_A ){atPos = SEQUENCE_AT_END;}
 
 	if(this->first!=NULL){	
@@ -64,8 +68,6 @@ void sequence_add(list_sequence * this,char atPos,char * name,int num ,circular_
 		this->curent = new;
 
 	}
-
-
 
 
 	//modifier par le constructeur d'un circular vector
@@ -100,10 +102,34 @@ void sequence_del_by_name(list_sequence * this, char * name){
 	b->next = a->next;
 	free(a);
 	return;
+}
 
+void sequence_free_one_seq(sequenc * this){
+	
+	if(this==NULL)
+		return;
+	sequence_free_one_seq(this->next);	
+	free(this->name);		
+	struct_free_circular_vector(this->seq);	
+	free(this);
+	}
 
+void sequence_drop(list_sequence * this){
+	if(this->first==NULL)
+		return;
+	
+	sequence_free_one_seq(this->first);
 
 }
+void sequence_free(list_sequence* this){
+	if(this==NULL)
+		return;
+	sequence_drop(this);	
+	free(this);
+}
+
+
+
 
 /*void sequence_del_by_num(list_sequence * this,int num){
 
@@ -133,11 +159,11 @@ void sequence_deplacement(list_sequence * this , int sens){
 
 }
 
-
-void sequence_free(sequenc * this){
+/*
+void sequence_free(sequenc * this){:
 	free(this->name);
 	free(this);
-}
+}*/
 
 
 //del the current
@@ -174,7 +200,7 @@ void sequence_del(list_sequence * this){
 
 				this->curent = this->curent->next;
 			}
-	sequence_free(seqAdel);	
+	sequence_free_one_seq(seqAdel);	
 	this->nb_total -= 1;
 }
 
@@ -184,16 +210,16 @@ void sequence_export_command_one(int  file_dest,struct circular_vector_mouv * mo
 	char  a[20];	
 	write (file_dest, "F", 1);
 
-	sprintf(a,"%ld",mouv->delay);
-	write (file_dest, a, strlen(a));
+	sprintf(a,"%7ld",mouv->delay);
+	sequence_tool_replace(a,' ','0');
+	write (file_dest, a,7);
 
 	write (file_dest, "P", 1);
 
-	write (file_dest,a,6);
 	for(int i= 0;i <nb_servo;i++){
-
 		sprintf(a,"%2ld%3ld",mouv->mouv[i].pin,mouv->mouv[i].pos);
-		write (file_dest, "a",5); 
+		sequence_tool_replace(a,' ','0');
+		write (file_dest,a,5); 
 	}
 	write (file_dest, "#", 1);
 
@@ -204,19 +230,20 @@ void sequence_export_command_one(int  file_dest,struct circular_vector_mouv * mo
 
 
 void sequence_export_command_all(int file_dest ,circular_vector * seque){
-	struct circular_vector_mouv * first =seque->first;
-	sequence_export_command_one(file_dest,first);
-	struct circular_vector_mouv * ite = first->next;
-	while(ite!=first){
+	struct circular_vector_mouv * ite = seque->first->next;
+	do{
 		sequence_export_command_one(file_dest,ite);
-		ite = first->next;
-	}
+		ite = ite->next;
+	}while(seque->first->prev != ite);
+ }
+
+void sequence_tool_replace(char * replace,char when,char by){
+	for(unsigned int i = 0;i < (unsigned int )strlen(replace);i++){
+	
+		if(when==replace[i]){
+			replace[i] = by; 
+		}	
+	
+	}	
+
 }
-
-
-
-
-
-
-
-

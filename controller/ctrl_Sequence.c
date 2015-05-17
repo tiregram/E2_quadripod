@@ -6,12 +6,13 @@
 #include "../interface/ncurses_ListSequence.h"
 #include "../data/data_ListMenu.h"
 #include "../data/data_modelUart.h"
+#include "../data/data_modelFile.h"
 
 menu_panel * menu_seq;
 ncu_sequence * interface_seq;
 ncu_list_servo * serv;
 ncu_frame * frame;
-
+file_struct * file;
 
 uart_instance * uart_evalbot;
 
@@ -28,6 +29,7 @@ int Cseq_init(){
 	menu_seq = menu_init(1,1,20,9,menu,7);
 	interface_seq = ncu_sequence_init(seqa,1,10,20,30);
 	frame = frame_init(24,15);
+	file = file_init("lap","/tmp/lap.save");
 	return 0;
 	}
 
@@ -63,7 +65,19 @@ int Cseq_lauch(){
 			ncu_sequence_action(interface_seq,cmda);
 			int i = uart_sendNew(uart_evalbot,seqa->curent->seq);
 			uart_sendJouer(uart_evalbot,i);	
-				break;		
+				break;
+
+		case 4 : 
+
+			file_charge(file,seqa);
+			if(seqa == NULL)
+				return 0;
+			break;
+			
+		case 5 :
+			file_save(file,seqa);
+
+		break;		
 		case -1:return 0;
 			break;
 	}
