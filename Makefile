@@ -6,7 +6,7 @@ NCURSES = -lncurses
 COLOR = -fdiagnostics-color=auto
 
 DATA      = data_struct.o data_modelFile.o data_modelUart.o data_Sequence.o data_ListMenu.o
-INTERFACE =  ncurses_inputSelect.o ncurses_ServoWindow.o ncurses_MessageBox.o ncurses_Frame.o ncurses_CmdLine.o ncurses_Menu.o ncurses_ListSequence.o ncurses_inputString.o
+INTERFACE =  ncurses_inputSelect.o ncurses_ServoWindow.o ncurses_MessageBox.o ncurses_Frame.o ncurses_CmdLine.o ncurses_Menu.o ncurses_ListSequence.o ncurses_inputString.o ncurses_FileSelect.o
 CTRL 	  = ctrl_Base.o ctrl_Sequence.o
 
 all: princ
@@ -66,8 +66,17 @@ ncurses_CmdLine.o:
 ncurses_inputString.o:
 	@$(CC) -o ncurses_inputString.o -c interface/ncurses_InputString.c $(CFLAGS) $(COLOR)
 
+ncurses_FileSelect.o:
+	@$(CC) -o ncurses_FileSelect.o -c interface/ncurses_FileSelect.c $(CFLAGS) $(COLOR)
+
+
+
+
+
+
 debug: $(DATA) $(INTERFACE) $(CTRL) 
 	@$(CC) -o lauch-debug interface/debug/ncurses_test.c $(INTERFACE) $(DATA) $(CFLAGS) $(COLOR) $(NCURSES) $(MATH) 
+
 
 ctrl.o:
 	@$(CC) -o ctrl.o -c include/ctrl.c $(CFLAGS) $(COLOR)

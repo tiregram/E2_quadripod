@@ -15,8 +15,8 @@ void set_blocking (int fd, int should_block);
 
 
 
-uart_instance * init_uart(char *  portname ){
-	uart_instance * this = malloc(sizeof(uart_instance));
+uart_struct * uart_init(char *  portname ){
+	uart_struct * this = malloc(sizeof(uart_struct));
 	this->nom = portname;
 	this->file = open (portname, O_RDWR | O_NOCTTY | O_SYNC);
 	if (this->file < 0)
@@ -98,7 +98,7 @@ set_blocking (int fd, int should_block)
 
 
 
-int uart_sendNew(uart_instance * this, circular_vector * sequence){
+int uart_sendNew(uart_struct * this, circular_vector * sequence){
 	char a[3];
 	write (this->file, "C", 1);
 	sequence_export_command_all(this->file,sequence);
@@ -107,7 +107,7 @@ int uart_sendNew(uart_instance * this, circular_vector * sequence){
 	return atoi(a);
 }
 
-void uart_sendModif(uart_instance * this, circular_vector * sequence,int indice){
+void uart_sendModif(uart_struct * this, circular_vector * sequence,int indice){
 	write (this->file, "M", 1);
 	char a[3];
 	sprintf(a,"%i",indice);
@@ -116,7 +116,7 @@ void uart_sendModif(uart_instance * this, circular_vector * sequence,int indice)
 	write (this->file, "$", 1);
 }
 
-void uart_sendJouer(uart_instance * this , int indice){
+void uart_sendJouer(uart_struct * this , int indice){
 	write (this->file, "J", 1);
 	char a[3];
 	sprintf(a,"%2i\n",indice);

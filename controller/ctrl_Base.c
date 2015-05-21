@@ -5,19 +5,21 @@
 #include "../interface/ncurses_Menu.h"
 #include "../interface/ncurses_CmdLine.h"
 #include "../data/data_Sequence.h"
+#include "../interface/ncurses_MessageBox.h"
+#include "../interface/ncurses_ListSequence.h"
+#include "../interface/ncurses_FileSelect.h"
+
 //ils sont 1 et ce ne sont que des * 
 
 
-
 menu_panel * menu_base;
+ncu_fileSelect * file_selector;
+
 
 //menuPrincipal
 int Cbase_lauch(){
-	cmda = cmd_init();
+
 	
-
-
-
 
 	menu_refrech(menu_base);
 	while(1)
@@ -54,8 +56,15 @@ int Cbase_init(){
 	menu[2] = "help";
 	menu[3] = "Exit";	
 	menu_base = menu_init(1,1,20,9,menu,4);
+	messBoxa=  messageBox_init(COLS*3/4+1,1,LINES-2,COLS/4,"Message");
+	messageBox_print(messBoxa,MESBOX_BASIC,"salut\n");
+	messageBox_refrech(messBoxa);	
 	
 	seqa = sequence_init();
+	
+	cmda = cmd_init();
+		
+	file_selector = fileSelect_init(20,6,25,1);
 	
 	Cseq_init();
 	return 0;

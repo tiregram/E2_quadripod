@@ -129,13 +129,15 @@ t_mouv * struct_mouv(unsigned long * pin ,unsigned long * pos){
 void struct_set_From_Array(circular_vector * this,unsigned long * pin ,unsigned long * pos,unsigned long delay){
 	this->curent->delay = delay;
 	for(int i=0;i<nb_servo;i++){
-	this->curent->mouv[i].pin = pin[i];	
-	this->curent->mouv[i].pos = pos[i];	
+		this->curent->mouv[i].pin = pin[i];	
+		this->curent->mouv[i].pos = pos[i];	
 	}
 }
 
 void struct_create_From_Array(circular_vector * this,unsigned long * pin ,unsigned long * pos,unsigned long delay){
 	struct_new(this,STRUCT_END);
+	this->curent = this->first->prev;
+
 	struct_set_From_Array(this, pin , pos, delay);
 }
 

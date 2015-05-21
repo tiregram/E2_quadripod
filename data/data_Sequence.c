@@ -230,11 +230,11 @@ void sequence_export_command_one(int  file_dest,struct circular_vector_mouv * mo
 
 
 void sequence_export_command_all(int file_dest ,circular_vector * seque){
-	struct circular_vector_mouv * ite = seque->first->next;
+	struct circular_vector_mouv * ite = seque->first;
 	do{
 		sequence_export_command_one(file_dest,ite);
 		ite = ite->next;
-	}while(seque->first->prev != ite);
+	}while(seque->first != ite);
  }
 
 void sequence_tool_replace(char * replace,char when,char by){

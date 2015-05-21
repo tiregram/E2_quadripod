@@ -8,6 +8,7 @@ typedef struct{
 	int option;//option pas encore definie mais il y en a 32 de dispo dans un int
 	//on peuxm etere
 	WINDOW* win;
+	int (*verifFuncChar)(char); 
 } inputString;
 
 
@@ -22,8 +23,10 @@ int inputString_action(inputString * this, cmd_line * cmda);
 void inputString_changeCible(inputString * this, char * pointOn, int size);
 
 
+void inputString_changeFunctionChar(inputString* this ,int (*func)(char) );
 
 
+void inputString_clean_string(inputString * this);
 
 
 

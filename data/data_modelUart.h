@@ -5,10 +5,10 @@ typedef struct{
 	int file;
 	char * nom;
 	int work;
-} uart_instance;
+} uart_struct;
 
-uart_instance * init_uart(char *  portname );
-int uart_sendNew(uart_instance * this, circular_vector * sequence);
-void uart_sendModif(uart_instance * this, circular_vector * sequence,int indice);
-void uart_sendJouer(uart_instance * this , int indice);
+uart_struct * uart_init(char *  portname );
+int uart_sendNew(uart_struct * this, circular_vector * sequence);
+void uart_sendModif(uart_struct * this, circular_vector * sequence,int indice);
+void uart_sendJouer(uart_struct * this , int indice);
 #endif

@@ -3,6 +3,7 @@
 #include <string.h>
 #include "data_Sequence.h"
 #include "../include/basic.h"
+#include "../interface/ncurses_MessageBox.h"
 #include "data_modelFile.h"
 #include <fcntl.h>
 #include <unistd.h>
@@ -12,9 +13,9 @@
 
 
 
-file_struct * file_init(char * name,char * path){
+file_struct * file_init(char * name,char * path,int opt){
 	file_struct * this = malloc(sizeof(file_struct));
-	this->file = open(path,O_RDWR);
+	this->file = open(path,opt);
 	this->name = malloc(strlen(name));
 	this->dataRead = malloc(sizeof(struct stock));
 	this->dataRead->ret = 0;
@@ -24,18 +25,36 @@ file_struct * file_init(char * name,char * path){
 }
 
 
-void  file_save(file_struct* this,list_sequence *tosave){
-	char buf[20];
+void  file_save(file_struct* this,list_sequence *tosave,MessBox* messBox){
+	char buff[20];
+	if(this->file==0){
+		messageBox_print(messBox ,MESBOX_ERROR,"NO FILE");
+		return;
+	}
+
+	
+
+	lseek(this->file,0,SEEK_SET);
+
 	sequenc* a  = tosave->first;
+	if(a==NULL){
+		messageBox_print(messBox,MESBOX_ERROR,"sequence est vide");
+		return;
+	}	
+	
+	
 	while(a != NULL){
 		write(this->file,"S",1);
-		sprintf(buf,"%10s",a->name);
-		write(this->file,buf,10);
+		sprintf(buff,"%10s",a->name);
+		write(this->file,buff,10);
 		sequence_export_command_all(this->file,a->seq);
 		lseek(this->file,-1,SEEK_CUR);
 		write(this->file,"%",1);
+		messageBox_print(messBox,MESBOX_VALID,"Save: %10s is save.\n",a->name);
+
 		a = a->next;
 	}
+
 		write(this->file,"*",1);	
 	return;
 }
@@ -50,14 +69,21 @@ void file_read(file_struct *  this,int nb){
 }
 
 
-char *	file_charge(file_struct * this,list_sequence * seq){
+void file_charge(file_struct * this,list_sequence * seq,MessBox* messBox){
+
+
+	if(this->file==0){
+		messageBox_print(messBox ,MESBOX_ERROR,"Charge: no file, no permition %i",this->file);
+		return;
+	}
+	
+	char buff[20];
 	sequence_drop(seq);
 	seq->first = NULL;
 	seq->curent = NULL;
 	seq->nb_total = 0;
 	seq->last =NULL;
 
-	char * ret = malloc(sizeof(char)*20);
 	lseek(this->file,0,SEEK_SET);
 	int nostop;
 	circular_vector *cv;
@@ -66,12 +92,14 @@ char *	file_charge(file_struct * this,list_sequence * seq){
 	unsigned long pin[8];
 	unsigned long pos[8];
 	
-	
+
+
 	file_read(this,1);
 	if(this->dataRead->cont[0]!='S'){
-		printw("no begin");	
-		refresh();		
-		return NULL;}
+		messageBox_print(messBox,MESBOX_ERROR,"Charge: No begin file\n");
+		messageBox_print(messBox,MESBOX_ERROR,"Charge: Not load\n");
+		return;
+	}
 	do{
 		file_read(this,10);
 		strncpy(name,this->dataRead->cont,10);
@@ -81,25 +109,24 @@ char *	file_charge(file_struct * this,list_sequence * seq){
 			file_read(this,1);
 
 			if(this->dataRead->cont[0]!='F'){
-				printw("no F");
-				refresh();
-				return NULL;}
+				messageBox_print(messBox,MESBOX_ERROR,"Charge: no \'F\'\n");
+				return;}
 
 			file_read(this,7);
 			delay = strtoul(this->dataRead->cont,NULL,10);
 			file_read(this,1);
 
 			if(this->dataRead->cont[0]!='P'){
-				printw("no P");			
-				refresh();
-				return NULL;}
+				printw("File: no \'P\'");		
+				return;}
 
 
 			for(int i = 0 ; i<nb_servo;i++){
 				file_read(this,2);
+				this->dataRead->cont[2]='\0';
 				pin[i] = strtoul(this->dataRead->cont,NULL,10);
-
 				file_read(this,3);
+				this->dataRead->cont[3]='\0';
 				pos[i] = strtoul(this->dataRead->cont,NULL,10);
 			}
 			struct_create_From_Array(cv,pin,pos,delay);
@@ -110,15 +137,15 @@ char *	file_charge(file_struct * this,list_sequence * seq){
 			}else if(this->dataRead->cont[0]=='%'){
 				nostop = 0;
 			}else{
-				printw("no stop");			
-				refresh();
-				return NULL;
+				messageBox_print(messBox,MESBOX_ERROR,"Charge: no END for Frame\n");
+				return ;
 			}
 
 		}while(nostop);
 
-		sequence_add(seq,SEQUENCE_AT_END,name,-1,cv);
-
+		sequence_add(seq,SEQUENCE_AT_END,name,seq->nb_total,cv);
+		sprintf(buff,"Charge: %10s is charge.\n",name);
+		messageBox_print(messBox,MESBOX_VALID,buff);
 
 
 		file_read(this,1);
@@ -127,17 +154,16 @@ char *	file_charge(file_struct * this,list_sequence * seq){
 		}else if(this->dataRead->cont[0]=='*'){
 			nostop = 0;
 		}else{
-			printw("no stop 2");			
-			refresh();
-			return NULL;
+			messageBox_print(messBox,MESBOX_ERROR,"Charge: no END for Sequence\n");
+			return ;
 		}
 	}while(nostop);
 
 	seq->curent = seq->first;
+	
 
+	return;
 
-	strcpy(ret,"Chargement ok");
-	return ret;
 }
 void file_exit(file_struct*  this){
 	close(this->file);

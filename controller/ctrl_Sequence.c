@@ -2,19 +2,23 @@
 #include "../interface/ncurses_CmdLine.h"
 #include "../interface/ncurses_Menu.h"
 #include "../interface/ncurses_Frame.h"
-
+#include "../interface/ncurses_FileSelect.h"
 #include "../interface/ncurses_ListSequence.h"
 #include "../data/data_ListMenu.h"
 #include "../data/data_modelUart.h"
 #include "../data/data_modelFile.h"
+
+#include <stdlib.h> 
+#include <fcntl.h>
+#include <sys/stat.h>
 
 menu_panel * menu_seq;
 ncu_sequence * interface_seq;
 ncu_list_servo * serv;
 ncu_frame * frame;
 file_struct * file;
-
-uart_instance * uart_evalbot;
+ncu_fileSelect * file_selector;
+uart_struct * uart_evalbot;
 
 int Cseq_init(){
 	char** menu= menu_list_init(20,8);
@@ -25,61 +29,65 @@ int Cseq_init(){
 	menu[4] ="ouvrir";
 	menu[5] ="sauvegarder";
 	menu[6] ="help";
-	uart_evalbot =  init_uart("/dev/ttyUSB0");
+	uart_evalbot = uart_init("/dev/ttyUSB0");
 	menu_seq = menu_init(1,1,20,9,menu,7);
 	interface_seq = ncu_sequence_init(seqa,1,10,20,30);
 	frame = frame_init(24,15);
-	file = file_init("lap","/tmp/lap.save");
 	return 0;
-	}
+}
+
+
+void Cseq_setFileSelector(ncu_fileSelect * fs){
+	file_selector = fs;
+}
 
 
 int Cseq_lauch(){
-
 	menu_refrech(menu_seq);	
 	while(1)
-	switch(menu_action(menu_seq,cmda)){
-		case 0:
-		ncu_sequence_new_elem(interface_seq,cmda);
-			break;
-		case 1: 
-		if(seqa->first == NULL)
-			break;
-		if(seqa->curent == NULL)
-			break;
-		
-	
-		ncu_sequence_action(interface_seq,cmda);
-		frame_change(frame,seqa->curent->seq);
-		frame_action(frame,cmda);	
-			
-		
-		
-		
-			break;
-		case 2:
-			ncu_sequence_action(interface_seq,cmda);
-			ncu_sequence_del(interface_seq);
-			break;
-		case 3:
-			ncu_sequence_action(interface_seq,cmda);
-			int i = uart_sendNew(uart_evalbot,seqa->curent->seq);
-			uart_sendJouer(uart_evalbot,i);	
+		switch(menu_action(menu_seq,cmda)){
+			case 0:
+				ncu_sequence_new_elem(interface_seq,cmda);
+				break;
+			case 1: 
+				if(seqa->first == NULL)
+					break;
+				if(seqa->curent == NULL)
+					break;
+
+				ncu_sequence_action(interface_seq,cmda);
+				frame_change(frame,seqa->curent->seq);
+				frame_action(frame,cmda);	
+
+				break;
+			case 2:
+				ncu_sequence_action(interface_seq,cmda);
+				ncu_sequence_del(interface_seq);
+				break;
+			case 3:
+
+				ncu_sequence_action(interface_seq,cmda);
+				int i = uart_sendNew(uart_evalbot,seqa->curent->seq);
+				uart_sendJouer(uart_evalbot,i);	
+
 				break;
 
-		case 4 : 
+			case 4 : 
+				fileSelect_getFIle(file_selector,cmda,O_RDONLY);
+				file_charge(file_selector->file,seqa,messBoxa);
+				messageBox_refrech(messBoxa);
+				file_exit(file_selector->file);	
+				break;
 
-			file_charge(file,seqa);
-			if(seqa == NULL)
-				return 0;
-			break;
-			
-		case 5 :
-			file_save(file,seqa);
+			case 5 :
+				fileSelect_getFIle(file_selector,cmda, O_WRONLY );
+				file_save(file_selector->file,seqa,messBoxa);
+				messageBox_refrech(messBoxa);
+				file_exit( file_selector->file);
+				break;		
+			case -1:return 0;
+				break;
+		}
 
-		break;		
-		case -1:return 0;
-			break;
-	}
 
 }

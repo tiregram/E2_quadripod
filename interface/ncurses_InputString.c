@@ -7,7 +7,8 @@ inputString * inputString_init(int startX,int startY,int sizeX){
 	inputString* this =  malloc(sizeof(inputString));
 	this->win = newwin(1,sizeX,startY,startX); 
 	this->sizeTab = sizeX;
-	this->option = 0;//no option 		
+	this->option = 0;//no option 
+	inputString_changeFunctionChar(this,NULL);
 	return this;
 }
 
@@ -32,6 +33,15 @@ inputString * inputString_init_justPointer(int startX,int startY,char * pointOn,
 void inputString_changeCible(inputString * this, char * pointOn, int size){
 	this->tab = pointOn;
 	this->sizeTab = size;
+}
+
+void inputString_clean_string(inputString * this){
+
+	for(int i = 0;i<this->sizeTab;i++){
+		this->tab[i]=' ';	
+	
+	}	
+
 }
 
 
@@ -93,6 +103,7 @@ int inputString_action(inputString * this , cmd_line * cmda){
 			i =(i+this->sizeTab) % this->sizeTab;
 			break;
 		case '\n':
+			this->tab[i]='\0';
 			inputString_deselect(this);
 			return 1;
 		break;
@@ -106,8 +117,10 @@ int inputString_action(inputString * this , cmd_line * cmda){
 			inputString_mvCursor(this,++i);
 			i =(i+this->sizeTab) % this->sizeTab;
 		break;
+
 		default: 
-		if((k>='A'&& k<='Z')||(k>='a'&& k<='z')){
+		if((*(this->verifFuncChar))(k)){
+
 			inputString_setOneChar(this,i++,k);	
 			i =(i+this->sizeTab) % this->sizeTab;
 
@@ -115,8 +128,22 @@ int inputString_action(inputString * this , cmd_line * cmda){
 
 		break;	
 			
-	}}		
+	}
+}		
 
 }
 
+
+int inputString_accept_only_aplhabet(char k){
+	return ((k>='A'&& k<='Z')||(k>='a'&& k<='z'));
+}
+
+void inputString_changeFunctionChar(inputString* this ,int (*func)(char) ){
+	if(func != NULL){
+		this->verifFuncChar = func;
+	}else {
+		this->verifFuncChar = &inputString_accept_only_aplhabet;
+	}
+	
+	}  
 

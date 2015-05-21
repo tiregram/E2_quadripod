@@ -11,7 +11,7 @@ typedef struct {
 } MessBox;
  
 
-MessBox *  messageBox_init(int x,int y,char * titre);
+MessBox * messageBox_init(int  startX,int startY,int sizeY,int sizeX,char * titre);
 void messageBox_refrech(MessBox * this );
 void messageBox_print(MessBox * this,char type,char *message, ...);
 #endif

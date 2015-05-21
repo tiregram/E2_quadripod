@@ -6,15 +6,16 @@
 
 WINDOW * a_privFunc_create_newwin(int height, int width, int starty, int startx);
 
-MessBox * messageBox_init(int x,int y,char * titre){
+MessBox * messageBox_init(int  startX,int startY,int sizeY,int sizeX,char * titre){
 	
 	MessBox * this = malloc(sizeof(MessBox));
 
-	WINDOW * locale = a_privFunc_create_newwin(25,50,y,x);
+	WINDOW * locale = a_privFunc_create_newwin(sizeY,sizeX,startY,startX);
 	wprintw(locale," %s",titre);
 	wrefresh(locale);		
 
-	WINDOW * locMes = newwin(23, 48, y+1, x+1);
+	WINDOW * locMes = newwin(sizeY-2,sizeX-2,startY+1, startX+1);
+	
 	wrefresh(locMes);		
 	scrollok(locMes, TRUE);
 	
