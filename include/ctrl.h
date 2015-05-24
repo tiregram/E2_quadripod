@@ -7,7 +7,7 @@
 
 
 extern list_sequence * seqa;
-extern cmd_line *  cmda;
+extern ncu_cmdLine *  cmda;
 extern MessBox * messBoxa;
 
 

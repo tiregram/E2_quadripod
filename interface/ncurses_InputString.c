@@ -3,7 +3,7 @@
 #include <ncurses.h>
 #include <stdlib.h>
 
-ncu_inputString * inputString_init(int startX,int startY,int sizeX){
+ncu_inputString * ncu_inputString_init(int startX,int startY,int sizeX){
 	ncu_inputString* this =  malloc(sizeof(ncu_inputString));
 	this->win = newwin(1,sizeX,startY,startX); 
 	this->sizeTab = sizeX;
@@ -14,8 +14,8 @@ ncu_inputString * inputString_init(int startX,int startY,int sizeX){
 
 
 
-ncu_inputString * inputString_init_NewString(int startX,int startY,int sizeOfString){
-	ncu_inputString * this = inputString_init(startX,startY,sizeOfString);
+ncu_inputString * ncu_inputString_init_NewString(int startX,int startY,int sizeOfString){
+	ncu_inputString * this = ncu_inputString_init(startX,startY,sizeOfString);
 	this->tab = malloc(sizeof(char)*sizeOfString);
 	for(int i=0;i<this->sizeTab;i++){
 		this->tab[i]= ' ';
@@ -24,13 +24,13 @@ ncu_inputString * inputString_init_NewString(int startX,int startY,int sizeOfStr
 }
 
 
-ncu_inputString * inputString_init_justPointer(int startX,int startY,char * pointOn,int size){
-	ncu_inputString * this = inputString_init(startX,startY,size);
+ncu_inputString * ncu_inputString_init_justPointer(int startX,int startY,char * pointOn,int size){
+	ncu_inputString * this = ncu_inputString_init(startX,startY,size);
 	this->tab = pointOn;
 	return this;
 
 }
-void inputString_changeCible(ncu_inputString * this, char * pointOn, int size){
+void ncu_inputString_changeCible(ncu_inputString * this, char * pointOn, int size){
 	this->tab = pointOn;
 	this->sizeTab = size;
 }
@@ -87,19 +87,19 @@ void ncu_inputString_setOneChar(ncu_inputString * this,int at , char theCaract )
 }
 
 
-int ncu_inputString_action(ncu_inputString * this , cmd_line * cmda){
+int ncu_inputString_action(ncu_inputString * this ,ncu_cmdLine * cmda){
 	ncu_inputString_select(this);
 	int k;
 	int i = 0;
 	ncu_inputString_mvCursor(this,0);
 	while(1){
-		k = cmd_getCh(cmda);
+		k = ncu_cmd_getCh(cmda);
 	switch(k){
 		
 		case 127:
 			ncu_inputString_setOneChar(this,i,' ');
 				
-			inputString_mvCursor(this,(i!=0)?--i:0);
+			ncu_inputString_mvCursor(this,(i!=0)?--i:0);
 			i =(i+this->sizeTab) % this->sizeTab;
 			break;
 		case '\n':
@@ -109,12 +109,12 @@ int ncu_inputString_action(ncu_inputString * this , cmd_line * cmda){
 		break;
 		
 		case KEY_LEFT:
-		inputString_mvCursor(this,--i);
+			ncu_inputString_mvCursor(this,--i);
 			i =(i+this->sizeTab) % this->sizeTab;
 		break;
 			
 		case KEY_RIGHT:
-			inputString_mvCursor(this,++i);
+			ncu_inputString_mvCursor(this,++i);
 			i =(i+this->sizeTab) % this->sizeTab;
 		break;
 

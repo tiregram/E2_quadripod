@@ -3,17 +3,17 @@
 #include <math.h>
 #include <stdlib.h>
 #include <ncurses.h>
-int privFunc_assignValeur	(ncu_inputNumber* this,int ch);
-void privFunc_changeByte	(ncu_inputNumber* this, char ch,int nb);
+int privFunc_assignValeur(ncu_inputNumber* this,int ch);
+void privFunc_changeByte(ncu_inputNumber* this, char ch,int nb);
 
-void privFunc_selectedInput	(ncu_inputNumber* this);
-void privFunc_deselectedInput	(ncu_inputNumber* this);
+void privFunc_selectedInput(ncu_inputNumber* this);
+void privFunc_deselectedInput(ncu_inputNumber* this);
 
-void privFunc_passArray_To_Char	(ncu_inputNumber* this);
+void privFunc_passArray_To_Char(ncu_inputNumber* this);
 void privFunc_passChar_To_Array	(ncu_inputNumber* this);
 
 
-ncu_inputNumber * inputSelect_init(unsigned long * pval,int y,int x,unsigned long  min,unsigned long  max,int nbByte){	
+ncu_inputNumber * ncu_inputSelect_init(unsigned long * pval,int y,int x,unsigned long  min,unsigned long  max,int nbByte){	
 	ncu_inputNumber * this = malloc(sizeof(ncu_inputNumber));
 	this->tab= malloc(sizeof(char)*nbByte);
 	this->val=pval;
@@ -65,7 +65,7 @@ void ncu_inputSelect_modifInput(ncu_inputNumber * this){
 	while(exit){
 		ch = wgetch(this->win);	
 		if(ch>47 && ch<58){
-			exit = privFunc_assignValeur(this,ch);						
+			exit = privFunc_assignValeur(this,ch);
 		}else 
 		if(ch == 'q'){
 			exit =0;	
@@ -93,7 +93,7 @@ void ncu_inputSelect_modifInput(ncu_inputNumber * this){
 
 
 
-int ncu_privFunc_assignValeur(ncu_inputNumber * this,int ch){
+int privFunc_assignValeur(ncu_inputNumber * this,int ch){
 	int x,y;
 	getyx(this->win,y,x);
 	privFunc_changeByte(this,ch,x);	
@@ -105,7 +105,7 @@ int ncu_privFunc_assignValeur(ncu_inputNumber * this,int ch){
 }
 
 
-void 	ncu_privFunc_changeByte(ncu_inputNumber * this, char ch,int nb){
+void 	privFunc_changeByte(ncu_inputNumber * this, char ch,int nb){
 	this->tab[nb]=ch-48;
 	privFunc_passArray_To_Char(this);
 
@@ -119,7 +119,7 @@ void 	privFunc_selectedInput(ncu_inputNumber * this){
 	ncu_inputSelect_Actualiser(this);
 }
 
-void 	ncu_privFunc_deselectedInput(ncu_inputNumber *this){
+void 	privFunc_deselectedInput(ncu_inputNumber *this){
 
 	wattroff(this->win,A_REVERSE);
 	ncu_inputSelect_Actualiser(this);

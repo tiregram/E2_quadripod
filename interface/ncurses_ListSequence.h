@@ -16,10 +16,10 @@ typedef struct{
 ncu_sequence * ncu_sequence_init(list_sequence * listSeq,int startX, int startY,int sizeX,int sizeY);
 
 int 
-ncu_sequence_action(ncu_sequence * this, cmd_line * cmda);
+ncu_sequence_action(ncu_sequence * this,ncu_cmdLine * cmda);
 
 void  
-ncu_sequence_new_elem(ncu_sequence * this,cmd_line * cmda);
+ncu_sequence_new_elem(ncu_sequence * this,ncu_cmdLine * cmda);
 
 void  
 ncu_sequence_del(ncu_sequence * this);

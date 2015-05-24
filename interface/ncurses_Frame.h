@@ -21,8 +21,12 @@ void
 ncu_frame_refrechlist(ncu_frame* this);
 
 int 
-ncu_frame_action(ncu_frame* this,cmd_line * cmda);
+ncu_frame_action(ncu_frame* this,ncu_cmdLine * cmda);
 
 void 
 ncu_frame_change(ncu_frame *this,circular_vector *data);
+
+void 
+ncu_frame_dest(ncu_frame * this);
+
 #endif

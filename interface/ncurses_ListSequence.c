@@ -50,11 +50,11 @@ void ncu_sequence_refrech(ncu_sequence * this){
 
    }*/
 
-int ncu_sequence_action(ncu_sequence * this, cmd_line * cmda){
+int ncu_sequence_action(ncu_sequence * this,ncu_cmdLine * cmda){
 
 	int ch = ' ';
 	while(1){
-		ch = cmd_getCh(cmda);
+		ch = ncu_cmd_getCh(cmda);
 		switch(ch){
 			case KEY_DOWN:
 				sequence_deplacement(this->seq,SEQUENCE_AVANT);	
@@ -83,7 +83,7 @@ int ncu_sequence_action(ncu_sequence * this, cmd_line * cmda){
 
 }
 
-void  ncu_sequence_new_elem(ncu_sequence * this,cmd_line * cmda){
+void  ncu_sequence_new_elem(ncu_sequence * this,ncu_cmdLine * cmda){
 	int x,y;
 	getbegyx(this->win,y,x);
 

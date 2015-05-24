@@ -13,7 +13,7 @@ void  	pricFunc_destroy_win(WINDOW *local_win);
 void 	privFunc_refrechWindow(ncu_servo * servo);
 
 
-ncu_list_servo* servoWindows_init(int posx , int posy/*,t_mouv * mouv*/){
+ncu_list_servo* ncu_servoWindows_init(int posx , int posy/*,t_mouv * mouv*/){
 	ncu_list_servo * locale = malloc(sizeof(ncu_list_servo));
 	
 	for(int i = 0;i<nb_servo;i++){
@@ -41,7 +41,7 @@ void ncu_listServo_dest(ncu_list_servo * this){
 
 
 
-void servoWindows_refrechWindows(ncu_list_servo * servos){
+void ncu_servoWindows_refrechWindows(ncu_list_servo * servos){
 	int i = 0;
 	for(i = 0 ; i<nb_servo;i++){
 		privFunc_refrechWindow(&servos->list[i]);
@@ -68,7 +68,7 @@ ncu_servo * privFunc_new(int x , int y/*,t_mouv val*/){
 	return loc; 
 }
 
-void  servoWindows_change(ncu_list_servo* l_servo,t_mouv * mouv){
+void ncu_servoWindows_change(ncu_list_servo* l_servo,t_mouv * mouv){
 	for(int i=0; i<nb_servo;i++)
 	{
 		ncu_inputSelect_changeCible(l_servo->list[i].pin,&mouv[i].pin);
@@ -79,7 +79,7 @@ void  servoWindows_change(ncu_list_servo* l_servo,t_mouv * mouv){
 
 }
 
-void servoWindows_hide(ncu_list_servo * this){
+void ncu_servoWindows_hide(ncu_list_servo * this){
 	for(int i = 0; i<nb_servo;i++)
 	{
 		werase(this->list[i].win);
@@ -89,7 +89,7 @@ void servoWindows_hide(ncu_list_servo * this){
 }
 
 
-void servoWindows_show(ncu_list_servo * this){
+void  ncu_servoWindows_show(ncu_list_servo * this){
 
 	for(int i = 0; i<nb_servo;i++){
 		box(this->list[i].win, 0 , 0);		
@@ -135,9 +135,9 @@ void privFunc_deselect(ncu_list_servo*this){
 	ncu_inputSelect_Actualiser(this->list[this->actual].pos);
 }
 
-int servoWindows_action(ncu_list_servo* this,cmd_line * cmda){
+int ncu_servoWindows_action(ncu_list_servo* this,ncu_cmdLine * cmda){
 	privFunc_select(this);
-	int ch = cmd_getCh(cmda);
+	int ch = ncu_cmd_getCh(cmda);
 	
 		switch(ch){
 			case KEY_RIGHT:

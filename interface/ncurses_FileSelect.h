@@ -14,7 +14,11 @@ typedef struct {
 }ncu_fileSelect;
 
 
-ncu_fileSelect* ncu_fileSelect_init(int sizeX,int sizeY,int startX,int startY);
-void ncu_fileSelect_createUart(ncu_fileSelect * this,cmd_line * cmdp);
+ncu_fileSelect* 
+ncu_fileSelect_init(int sizeX,int sizeY,int startX,int startY);
 
-void ncu_fileSelect_getFIle();
+void 
+ncu_fileSelect_createUart(ncu_fileSelect * this,ncu_cmdLine * cmdp);
+
+void 
+ncu_fileSelect_getFIle(ncu_fileSelect * this, ncu_cmdLine * cmdp,int opt);

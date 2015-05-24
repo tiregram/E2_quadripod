@@ -12,10 +12,10 @@ typedef struct{
 
 
 int 
-ncu_menu_action(ncu_menu_panel * this,cmd_line * cmda);
+ncu_menu_action(ncu_menu_panel * this,ncu_cmdLine * cmda);
 
 ncu_menu_panel* 
-menu_init(int startX, int startY, int sizeX,int  sizeY,char * * menu,unsigned int nb_choix);
+ncu_menu_init(int startX, int startY, int sizeX,int  sizeY,char * * menu,unsigned int nb_choix);
 
 void 
 ncu_menu_dest(ncu_menu_panel * this);

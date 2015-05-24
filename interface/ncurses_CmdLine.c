@@ -4,8 +4,8 @@
 
 
 
-cmd_line *  ncu_cmd_init(){
-	cmd_line * this = malloc(sizeof(cmd_line));	
+ncu_cmdLine *  ncu_cmd_init(){
+	ncu_cmdLine * this = malloc(sizeof(ncu_cmdLine));	
 	
 	int x,y;
 	getmaxyx(stdscr,y,x);	
@@ -17,6 +17,7 @@ cmd_line *  ncu_cmd_init(){
 	return this;
 
 }
+
 /*
 void ncu_cmd_addfunction(cmd_line * this, void* command, char * mathString){
 
@@ -25,8 +26,8 @@ void ncu_cmd_addfunction(cmd_line * this, void* command, char * mathString){
 	// permet de les apeler quand une des chaine mathSting mathch
 	// Exemeple la commande "send" execute la function send();
 }
+i*/
 
-
-int nuc_cmd_getCh(cmd_line * this){
+int ncu_cmd_getCh(ncu_cmdLine * this){
 	return	wgetch(this->win);
-}*/
+}

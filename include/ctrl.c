@@ -4,5 +4,5 @@
 #include "../data/data_Sequence.h"
 
 list_sequence * seqa;
-cmd_line *  cmda;
+ncu_cmdLine *  cmda;
 MessBox * messBoxa;

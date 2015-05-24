@@ -6,9 +6,15 @@ typedef struct {
 	//void * cmd[100];
 	//char * stringMa[100];
 	int nbOfFunction;
-} cmd_line;
+} ncu_cmdLine;
 
-cmd_line *  cmd_init();
-void cmd_addfunction(cmd_line * this, void* command, char * mathString);
-int cmd_getCh(cmd_line * this);
+ncu_cmdLine *  
+ncu_cmd_init();
+
+void 
+ncu_cmd_addfunction(ncu_cmdLine * this, void* command, char * mathString);
+
+int 
+ncu_cmd_getCh(ncu_cmdLine * this);
+
 #endif

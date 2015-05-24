@@ -44,20 +44,20 @@ void  ncu_menu_deselected(ncu_menu_panel * this){
 
 
 //int menu_action(ncu_menu_panel * this, cmd_line * cmda){
-int nuc_menu_action(ncu_menu_panel * this, cmd_line * cmda){	
+int ncu_menu_action(ncu_menu_panel * this,ncu_cmdLine * cmda){	
 	while(1){
 	ncu_menu_selected(this);
-	int ch = cmd_getCh(cmda);
+	int ch =ncu_cmd_getCh(cmda);
 	switch(ch){
 	case 'q':
 		return -1;
 		break;
 	case KEY_UP:
-		menu_deselected(this);
+		ncu_menu_deselected(this);
 		this->choix -= 1 ;
 		break;
 	case KEY_DOWN:
-		menu_deselected(this);
+		ncu_menu_deselected(this);
 		this->choix += 1 ;
 		break;
 	case '\n':
@@ -65,7 +65,7 @@ int nuc_menu_action(ncu_menu_panel * this, cmd_line * cmda){
 		break;
 
 	case '1':case '2':case '3':case '4':case '5':case '6':case '7':case '8':case '9':
-		menu_deselected(this);
+		ncu_menu_deselected(this);
 		this->choix=ch;	
 		break;
 	}

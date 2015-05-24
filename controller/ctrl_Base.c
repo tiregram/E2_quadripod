@@ -19,8 +19,6 @@ ncu_fileSelect * file_selector;
 //menuPrincipal
 int Cbase_lauch(){
 
-	
-
 	ncu_menu_refrech(menu_base);
 	while(1)
 	switch(ncu_menu_action(menu_base,cmda)){
@@ -39,6 +37,7 @@ int Cbase_lauch(){
 		case -1:return 0;
 			break;
 	}
+	return 0;
 
 }
 
@@ -55,14 +54,14 @@ int Cbase_init(){
 	menu[1] = "OpenCv";	
 	menu[2] = "help";
 	menu[3] = "Exit";	
-	menu_base = menu_init(1,1,20,9,menu,4);
+	menu_base = ncu_menu_init(1,1,20,9,menu,4);
 	messBoxa=  messageBox_init(COLS*3/4+1,1,LINES-2,COLS/4,"Message");
 	messageBox_print(messBoxa,MESBOX_BASIC,"salut\n");
 	messageBox_refrech(messBoxa);	
 	
 	seqa = sequence_init();
 	
-	cmda = cmd_init();
+	cmda = ncu_cmd_init();
 		
 	file_selector = ncu_fileSelect_init(20,6,25,1);
 	

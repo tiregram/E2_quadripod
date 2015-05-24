@@ -15,7 +15,7 @@ ncu_inputString * ncu_inputString_init(int startX,int startY,int sizeX);
 void inputString_refresh(ncu_inputString * this);
 ncu_inputString * ncu_inputString_init_NewString(int startX,int startY,int sizeOfString);
 void ncu_inputString_select(ncu_inputString * this);
-int ncu_inputString_action(ncu_inputString * this, cmd_line * cmda);
+int ncu_inputString_action(ncu_inputString * this,ncu_cmdLine * cmda);
 void ncu_inputString_changeCible(ncu_inputString * this, char * pointOn, int size);
 void ncu_inputString_changeFunctionChar(ncu_inputString* this ,int (*func)(char) );
 void ncu_inputString_clean_string(ncu_inputString * this);

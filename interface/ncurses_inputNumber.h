@@ -13,6 +13,7 @@ typedef struct{
 
 
 ncu_inputNumber*
+
 ncu_inputSelect_init(unsigned long * pval,int y,int x,unsigned long  min,unsigned long  max,int nbByte);	
 
 void
@@ -26,5 +27,8 @@ ncu_inputSelect_set(ncu_inputNumber * panel ,unsigned long pval);
 
 void
 ncu_inputSelect_Actualiser(ncu_inputNumber * enumvarpanel);
+
+void 
+ncu_inputSelect_dest(ncu_inputNumber * this);
 
 #endif

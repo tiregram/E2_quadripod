@@ -6,7 +6,7 @@
 #include "ncurses_ServoWindow.h"
 #include "ncurses_CmdLine.h"
 
-ncu_frame * frame_init(int x,int y/*,circular_vector* data*/){
+ncu_frame * ncu_frame_init(int x,int y/*,circular_vector* data*/){
 	ncu_frame * this = malloc(sizeof(ncu_frame));
 	this->con = newwin(25,50, y, x);
 
@@ -19,7 +19,7 @@ ncu_frame * frame_init(int x,int y/*,circular_vector* data*/){
 	return this;
 }
 
-void frame_change(ncu_frame *this,circular_vector *data){
+void ncu_frame_change(ncu_frame *this,circular_vector *data){
 	werase(this->scrool);
 	ncu_servoWindows_change(this->servo_panel ,data->curent->mouv);	
 	this->data = data;
@@ -41,7 +41,7 @@ void renderOneMouv(WINDOW * win, int y,int option,struct circular_vector_mouv * 
 
 
 
-void frame_refrechlist(ncu_frame* this){	
+void ncu_frame_refrechlist(ncu_frame* this){	
 	int y;
 	struct 	circular_vector_mouv*  stop = this->data->curent;
 	y=getmaxy(this->scrool);
@@ -71,12 +71,12 @@ void frame_refrechlist(ncu_frame* this){
 	wrefresh(this->scrool);
 }
 
-void frame_change_delay(ncu_frame* this){
+void ncu_frame_change_delay(ncu_frame* this){
 	ncu_inputSelect_changeCible(this->delay,&this->data->curent->delay);	
 	ncu_inputSelect_modifInput(this->delay);	
 }
  
-void frame_hide(ncu_frame * this){
+void ncu_frame_hide(ncu_frame * this){
 	wclear(this->scrool);
 	wclear(this->con);
 	wrefresh(this->scrool);
@@ -97,17 +97,17 @@ void frame_show(ncu_frame * this){
 
 
 //action 0 no refrech| 1 refrech | 2 refrech|
-int frame_action(ncu_frame* this,cmd_line* cmda){
+int ncu_frame_action(ncu_frame* this,ncu_cmdLine* cmda){
 	frame_show(this);
 	ncu_servoWindows_refrechWindows(this->servo_panel);	
 	while(1){
-	frame_refrechlist(this);
+	ncu_frame_refrechlist(this);
 
-	int action= cmd_getCh(cmda);
+	int action= ncu_cmd_getCh(cmda);
 
 	switch(action){
 		case 'q':
-			frame_hide(this);
+			ncu_frame_hide(this);
 			return 0;
 			break;
 		case KEY_UP:
@@ -127,7 +127,7 @@ int frame_action(ncu_frame* this,cmd_line* cmda){
 			
 			break;
 		case 'd':
-			frame_change_delay(this);		
+			ncu_frame_change_delay(this);		
 			break;
 		case 'e':
 
@@ -146,8 +146,7 @@ void ncu_frame_dest(ncu_frame * this){
 	delwin(this->scrool);	
 	delwin(this->con);	
 	ncu_inputSelect_dest(this->delay);
-	this->servo_panel;	
-
+	ncu_listServo_dest(this->servo_panel);
 	free(this);
 }	
 

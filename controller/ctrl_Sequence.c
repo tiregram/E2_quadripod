@@ -27,7 +27,7 @@ int Cseq_init(){
 	menu[4] ="ouvrir";
 	menu[5] ="sauvegarder";
 	menu[6] ="help";
-	menu_seq = menu_init(1,1,20,9,menu,7);
+	menu_seq = ncu_menu_init(1,1,20,9,menu,7);
 	interface_seq = ncu_sequence_init(seqa,1,10,20,30);
 	frame = ncu_frame_init(24,15);
 	return 0;

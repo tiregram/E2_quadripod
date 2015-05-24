@@ -25,12 +25,15 @@ void
 ncu_servoWindows_change(ncu_list_servo* l_servo,t_mouv * mouv);
 
 int  
-ncu_servoWindows_action(ncu_list_servo*  , cmd_line * cmda);
+ncu_servoWindows_action(ncu_list_servo*  , ncu_cmdLine * cmda);
 
 void 
 ncu_servoWindows_hide(ncu_list_servo * this);
 
 void 
 ncu_servoWindows_show(ncu_list_servo * this);
+
+void 
+ncu_listServo_dest(ncu_list_servo * this);
 
 #endif
