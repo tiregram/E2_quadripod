@@ -1,7 +1,7 @@
 #include <ncurses.h>
 #include <stdlib.h>
 #include "ncurses_ServoWindow.h"
-#include "ncurses_inputSelect.h"
+#include "ncurses_inputNumber.h"
 #include "ncurses_CmdLine.h"
 #include "../include/basic.h"
 
@@ -21,6 +21,25 @@ ncu_list_servo* servoWindows_init(int posx , int posy/*,t_mouv * mouv*/){
 	}
 	return locale;
 }
+
+
+void ncu_servoWindows_dest(ncu_servo * this){
+	delwin(this->win);
+	ncu_inputSelect_dest(this->pin);
+	ncu_inputSelect_dest(this->pos);
+	free(this);
+}
+
+
+void ncu_listServo_dest(ncu_list_servo * this){
+	
+	for(int i = 0; i<nb_servo ; i++)
+		ncu_servoWindows_dest(&this->list[i]);
+	free(this);
+	return;	
+}
+
+
 
 void servoWindows_refrechWindows(ncu_list_servo * servos){
 	int i = 0;
@@ -43,8 +62,8 @@ ncu_servo * privFunc_new(int x , int y/*,t_mouv val*/){
 	ncu_servo * loc=malloc(sizeof(ncu_servo));
        	loc->win=privFunc_create_newwin(6,20,y,x);
 	getbegyx(loc->win,y,x);
-	loc->pos = inputSelect_init(NULL,y+4,x+9,1,255,3);	
-	loc->pin = inputSelect_init(NULL,y+2,x+9,1,20,2);	
+	loc->pos = ncu_inputSelect_init(NULL,y+4,x+9,1,255,3);	
+	loc->pin = ncu_inputSelect_init(NULL,y+2,x+9,1,20,2);	
 
 	return loc; 
 }
@@ -52,10 +71,10 @@ ncu_servo * privFunc_new(int x , int y/*,t_mouv val*/){
 void  servoWindows_change(ncu_list_servo* l_servo,t_mouv * mouv){
 	for(int i=0; i<nb_servo;i++)
 	{
-		inputSelect_changeCible(l_servo->list[i].pin,&mouv[i].pin);
-		inputSelect_changeCible(l_servo->list[i].pos,&mouv[i].pos);
-		inputSelect_Actualiser(l_servo->list[i].pos);
-		inputSelect_Actualiser(l_servo->list[i].pin);
+		ncu_inputSelect_changeCible(l_servo->list[i].pin,&mouv[i].pin);
+		ncu_inputSelect_changeCible(l_servo->list[i].pos,&mouv[i].pos);
+		ncu_inputSelect_Actualiser(l_servo->list[i].pos);
+		ncu_inputSelect_Actualiser(l_servo->list[i].pin);
 	}
 
 }
@@ -83,10 +102,10 @@ void servoWindows_show(ncu_list_servo * this){
 }
 
 
-void privFunc_refrechWindow(ncu_servo * servo){
-		wrefresh(servo->win);	
-		inputSelect_Actualiser(servo->pin);
-		inputSelect_Actualiser(servo->pos);	
+void privFunc_refrechWindow(ncu_servo * this){
+		wrefresh(this->win);	
+		ncu_inputSelect_Actualiser(this->pin);
+		ncu_inputSelect_Actualiser(this->pos);	
 }
 
 void  privFunc_destroy_win(WINDOW *local_win)
@@ -96,15 +115,15 @@ void  privFunc_destroy_win(WINDOW *local_win)
 	delwin(local_win);
 }
 
-void privFunc_select(ncu_list_servo*this){
+void privFunc_select(ncu_list_servo* this){
 	int a = A_REVERSE;
 	wattron(this->list[this->actual].win,a);
 	box(this->list[this->actual].win, 0 , 0);	
 	mvwprintw(this->list[this->actual].win,0,0," %s","test");
 	wattroff(this->list[this->actual].win,a);
 	wrefresh(this->list[this->actual].win);
-	inputSelect_Actualiser(this->list[this->actual].pos);
-	inputSelect_Actualiser(this->list[this->actual].pin);
+	ncu_inputSelect_Actualiser(this->list[this->actual].pos);
+	ncu_inputSelect_Actualiser(this->list[this->actual].pin);
 }
 
 void privFunc_deselect(ncu_list_servo*this){
@@ -112,8 +131,8 @@ void privFunc_deselect(ncu_list_servo*this){
 	mvwprintw(this->list[this->actual].win,0,0," %s","test");
 	wrefresh(this->list[this->actual].win);
 
-	inputSelect_Actualiser(this->list[this->actual].pin);
-	inputSelect_Actualiser(this->list[this->actual].pos);
+	ncu_inputSelect_Actualiser(this->list[this->actual].pin);
+	ncu_inputSelect_Actualiser(this->list[this->actual].pos);
 }
 
 int servoWindows_action(ncu_list_servo* this,cmd_line * cmda){
@@ -138,11 +157,11 @@ int servoWindows_action(ncu_list_servo* this,cmd_line * cmda){
 				return 0;
 				break;
 			case 'p':
-				inputSelect_modifInput(this->list[this->actual].pin);
+				ncu_inputSelect_modifInput(this->list[this->actual].pin);
 
 				break;
 			case 'm':
-				inputSelect_modifInput(this->list[this->actual].pos);
+				ncu_inputSelect_modifInput(this->list[this->actual].pos);
 				break;
 		}
 		return 1;

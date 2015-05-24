@@ -7,11 +7,19 @@ typedef struct{
 	unsigned int nb_choix;
 	unsigned int choix;
 
-}menu_panel;
+}ncu_menu_panel;
 
 
 
-int menu_action(menu_panel * this,cmd_line * cmda);
-menu_panel* menu_init(int startX, int startY, int sizeX,int  sizeY,char * * menu,unsigned int nb_choix);
-void menu_refrech(menu_panel * this);
+int 
+ncu_menu_action(ncu_menu_panel * this,cmd_line * cmda);
+
+ncu_menu_panel* 
+menu_init(int startX, int startY, int sizeX,int  sizeY,char * * menu,unsigned int nb_choix);
+
+void 
+ncu_menu_dest(ncu_menu_panel * this);
+
+void 
+ncu_menu_refrech(ncu_menu_panel * this);
 #endif

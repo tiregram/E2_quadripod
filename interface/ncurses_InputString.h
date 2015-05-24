@@ -9,25 +9,17 @@ typedef struct{
 	//on peuxm etere
 	WINDOW* win;
 	int (*verifFuncChar)(char); 
-} inputString;
+}ncu_inputString;
 
-
-inputString * inputString_init(int startX,int startY,int sizeX);
-void inputString_refresh(inputString * this);
-inputString * inputString_init_NewString(int startX,int startY,int sizeOfString);
-
-void inputString_select(inputString * this);
-int inputString_action(inputString * this, cmd_line * cmda);
-
-
-void inputString_changeCible(inputString * this, char * pointOn, int size);
-
-
-void inputString_changeFunctionChar(inputString* this ,int (*func)(char) );
-
-
-void inputString_clean_string(inputString * this);
-
+ncu_inputString * ncu_inputString_init(int startX,int startY,int sizeX);
+void inputString_refresh(ncu_inputString * this);
+ncu_inputString * ncu_inputString_init_NewString(int startX,int startY,int sizeOfString);
+void ncu_inputString_select(ncu_inputString * this);
+int ncu_inputString_action(ncu_inputString * this, cmd_line * cmda);
+void ncu_inputString_changeCible(ncu_inputString * this, char * pointOn, int size);
+void ncu_inputString_changeFunctionChar(ncu_inputString* this ,int (*func)(char) );
+void ncu_inputString_clean_string(ncu_inputString * this);
+void ncu_inputString_dest(ncu_inputString * this);
 
 
 #endif

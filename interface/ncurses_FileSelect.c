@@ -14,20 +14,20 @@ ncu_fileSelect* fileSelect_init(int sizeX,int sizeY,int startX,int startY){
 	ncu_fileSelect * this  = malloc(sizeof(ncu_fileSelect));	
 	this->win = newwin(sizeY,sizeX,startY,startX);
 	box(this->win,0,0);	
-	this->input = inputString_init_NewString(startX+1,startY+2,sizeX-2);
-	inputString_changeFunctionChar(this->input , &fileSelect_acceptchar );
+	this->input = ncu_inputString_init_NewString(startX+1,startY+2,sizeX-2);
+	ncu_inputString_changeFunctionChar(this->input , &fileSelect_acceptchar );
 	return this;
 }
 
-void fileSelect_createUart(ncu_fileSelect * this,cmd_line * cmdp){
+void ncu_fileSelect_createUart(ncu_fileSelect * this,cmd_line * cmdp){
 	mvwprintw(this->win,1,getmaxx(this->win)/2-2,"UART");
 	wrefresh(this->win);
-	inputString_action(this->input,cmdp);
+	ncu_inputString_action(this->input,cmdp);
 	this->uart = uart_init(this->input->tab);
 		
 }
 
-void fileSelect_getFIle(ncu_fileSelect * this,cmd_line * cmdp,int opt){
+void ncu_fileSelect_getFIle(ncu_fileSelect * this,cmd_line * cmdp,int opt){
 
 	char name[30];	
 	char dest[30];
@@ -37,17 +37,17 @@ void fileSelect_getFIle(ncu_fileSelect * this,cmd_line * cmdp,int opt){
 	wrefresh(this->win);
 	
 	mvwin(this->input->win,getbegy(this->win)+2,getbegx(this->win)+1);
-	inputString_changeCible(this->input,name,30);
-	inputString_clean_string(this->input);
-	inputString_changeFunctionChar(this->input,NULL);
-	inputString_action(this->input,cmdp);
+	ncu_inputString_changeCible(this->input,name,30);
+	ncu_inputString_clean_string(this->input);
+	ncu_inputString_changeFunctionChar(this->input,NULL);
+	ncu_inputString_action(this->input,cmdp);
 
 
 	mvwin(this->input->win,getbegy(this->win)+4,getbegx(this->win)+1);
-	inputString_changeCible(this->input,dest,30);
-	inputString_clean_string(this->input);
-	inputString_changeFunctionChar(this->input,&fileSelect_acceptchar);
-	inputString_action(this->input,cmdp);
+	ncu_inputString_changeCible(this->input,dest,30);
+	ncu_inputString_clean_string(this->input);
+	ncu_inputString_changeFunctionChar(this->input,&fileSelect_acceptchar);
+	ncu_inputString_action(this->input,cmdp);
 	
 	this->file = file_init(name,dest,opt);
 	
@@ -55,12 +55,12 @@ void fileSelect_getFIle(ncu_fileSelect * this,cmd_line * cmdp,int opt){
 
 }
 
-void fileSelect_free(ncu_fileSelect * this){
+void ncu_fileSelect_free(ncu_fileSelect * this){
 	delwin(this->win);
 	free(this);	
 }
 
-int fileSelect_acceptchar(char k){
+int ncu_fileSelect_acceptchar(char k){
 	return ((k>='A'&& k<='Z')||
 		(k>='a'&& k<='z')||
 		(k>='0'&& k<='9')||

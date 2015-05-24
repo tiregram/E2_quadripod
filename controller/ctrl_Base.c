@@ -12,7 +12,7 @@
 //ils sont 1 et ce ne sont que des * 
 
 
-menu_panel * menu_base;
+ncu_menu_panel * menu_base;
 ncu_fileSelect * file_selector;
 
 
@@ -21,15 +21,15 @@ int Cbase_lauch(){
 
 	
 
-	menu_refrech(menu_base);
+	ncu_menu_refrech(menu_base);
 	while(1)
-	switch(menu_action(menu_base,cmda)){
+	switch(ncu_menu_action(menu_base,cmda)){
 		case 0:
 			Cseq_lauch();
-			menu_refrech(menu_base);
+			ncu_menu_refrech(menu_base);
 			break;
 		case 1: 
-			menu_refrech(menu_base);
+			ncu_menu_refrech(menu_base);
 			break;
 		case  2: 
 			break;
@@ -64,7 +64,7 @@ int Cbase_init(){
 	
 	cmda = cmd_init();
 		
-	file_selector = fileSelect_init(20,6,25,1);
+	file_selector = ncu_fileSelect_init(20,6,25,1);
 	
 	Cseq_init();
 	return 0;

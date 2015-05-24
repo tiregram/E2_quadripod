@@ -4,7 +4,7 @@
 
 
 
-cmd_line *  cmd_init(){
+cmd_line *  ncu_cmd_init(){
 	cmd_line * this = malloc(sizeof(cmd_line));	
 	
 	int x,y;
@@ -17,8 +17,9 @@ cmd_line *  cmd_init(){
 	return this;
 
 }
+/*
+void ncu_cmd_addfunction(cmd_line * this, void* command, char * mathString){
 
-void cmd_addfunction(cmd_line * this, void* command, char * mathString){
 	if(this->nbOfFunction>=100){return;} 
 	// déclare des fonction dans les void *
 	// permet de les apeler quand une des chaine mathSting mathch
@@ -26,6 +27,6 @@ void cmd_addfunction(cmd_line * this, void* command, char * mathString){
 }
 
 
-int cmd_getCh(cmd_line * this){
+int nuc_cmd_getCh(cmd_line * this){
 	return	wgetch(this->win);
-}
+}*/

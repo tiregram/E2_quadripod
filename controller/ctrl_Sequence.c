@@ -12,13 +12,11 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 
-menu_panel * menu_seq;
+ncu_menu_panel * menu_seq;
 ncu_sequence * interface_seq;
 ncu_list_servo * serv;
 ncu_frame * frame;
-file_struct * file;
 ncu_fileSelect * file_selector;
-uart_struct * uart_evalbot;
 
 int Cseq_init(){
 	char** menu= menu_list_init(20,8);
@@ -29,23 +27,28 @@ int Cseq_init(){
 	menu[4] ="ouvrir";
 	menu[5] ="sauvegarder";
 	menu[6] ="help";
-	uart_evalbot = uart_init("/dev/ttyUSB0");
 	menu_seq = menu_init(1,1,20,9,menu,7);
 	interface_seq = ncu_sequence_init(seqa,1,10,20,30);
-	frame = frame_init(24,15);
+	frame = ncu_frame_init(24,15);
 	return 0;
 }
-
 
 void Cseq_setFileSelector(ncu_fileSelect * fs){
 	file_selector = fs;
 }
 
+void Cseq_dest(){
+	ncu_menu_dest(menu_seq);
+	ncu_sequence_dest(interface_seq);		
+	ncu_frame_dest(frame);	
+}
+
+
 
 int Cseq_lauch(){
-	menu_refrech(menu_seq);	
+	ncu_menu_refrech(menu_seq);	
 	while(1)
-		switch(menu_action(menu_seq,cmda)){
+		switch(ncu_menu_action(menu_seq,cmda)){
 			case 0:
 				ncu_sequence_new_elem(interface_seq,cmda);
 				break;
@@ -56,8 +59,8 @@ int Cseq_lauch(){
 					break;
 
 				ncu_sequence_action(interface_seq,cmda);
-				frame_change(frame,seqa->curent->seq);
-				frame_action(frame,cmda);	
+				ncu_frame_change(frame,seqa->curent->seq);
+				ncu_frame_action(frame,cmda);	
 
 				break;
 			case 2:
@@ -65,22 +68,21 @@ int Cseq_lauch(){
 				ncu_sequence_del(interface_seq);
 				break;
 			case 3:
-
+				
 				ncu_sequence_action(interface_seq,cmda);
-				int i = uart_sendNew(uart_evalbot,seqa->curent->seq);
-				uart_sendJouer(uart_evalbot,i);	
 
 				break;
 
 			case 4 : 
-				fileSelect_getFIle(file_selector,cmda,O_RDONLY);
+				ncu_fileSelect_getFIle(file_selector,cmda,O_RDONLY);
 				file_charge(file_selector->file,seqa,messBoxa);
 				messageBox_refrech(messBoxa);
 				file_exit(file_selector->file);	
+				ncu_sequence_refrech(interface_seq);
 				break;
 
 			case 5 :
-				fileSelect_getFIle(file_selector,cmda, O_WRONLY );
+				ncu_fileSelect_getFIle(file_selector,cmda, O_WRONLY );
 				file_save(file_selector->file,seqa,messBoxa);
 				messageBox_refrech(messBoxa);
 				file_exit( file_selector->file);

@@ -6,7 +6,7 @@ NCURSES = -lncurses
 COLOR = -fdiagnostics-color=auto
 
 DATA      = data_struct.o data_modelFile.o data_modelUart.o data_Sequence.o data_ListMenu.o
-INTERFACE =  ncurses_inputSelect.o ncurses_ServoWindow.o ncurses_MessageBox.o ncurses_Frame.o ncurses_CmdLine.o ncurses_Menu.o ncurses_ListSequence.o ncurses_inputString.o ncurses_FileSelect.o
+INTERFACE =  ncurses_inputNumber.o ncurses_ServoWindow.o ncurses_MessageBox.o ncurses_Frame.o ncurses_CmdLine.o ncurses_Menu.o ncurses_ListSequence.o ncurses_inputString.o ncurses_FileSelect.o
 CTRL 	  = ctrl_Base.o ctrl_Sequence.o
 
 all: princ
@@ -45,8 +45,8 @@ ncurses_MessageBox.o:
 ncurses_Interface.o: 
 	@$(CC) -o ncurses_Interface.o -c interface/ncurses_Interface.c  $(CFLAGS) $(COLOR)
 
-ncurses_inputSelect.o:
-	@$(CC) -o ncurses_inputSelect.o -c interface/ncurses_inputSelect.c $(CFLAGS) $(COLOR)
+ncurses_inputNumber.o:
+	@$(CC) -o ncurses_inputNumber.o -c interface/ncurses_inputNumber.c $(CFLAGS) $(COLOR)
 
 ncurses_ServoWindow.o: 
 	@$(CC) -o ncurses_ServoWindow.o -c interface/ncurses_ServoWindow.c $(CFLAGS) $(COLOR)

@@ -5,8 +5,7 @@
 
 
 typedef struct {
-	inputString *input;
-
+	ncu_inputString *input;
 	union{
 		uart_struct * uart;
 		file_struct * file;		
@@ -15,6 +14,7 @@ typedef struct {
 }ncu_fileSelect;
 
 
-ncu_fileSelect* fileSelect_init(int sizeX,int sizeY,int startX,int startY);
-void fileSelect_createUart(ncu_fileSelect * this,cmd_line * cmdp);
-void fileSelect_getFIle();
+ncu_fileSelect* ncu_fileSelect_init(int sizeX,int sizeY,int startX,int startY);
+void ncu_fileSelect_createUart(ncu_fileSelect * this,cmd_line * cmdp);
+
+void ncu_fileSelect_getFIle();

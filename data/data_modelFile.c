@@ -50,10 +50,11 @@ void  file_save(file_struct* this,list_sequence *tosave,MessBox* messBox){
 		sequence_export_command_all(this->file,a->seq);
 		lseek(this->file,-1,SEEK_CUR);
 		write(this->file,"%",1);
-		messageBox_print(messBox,MESBOX_VALID,"Save: %10s is save.\n",a->name);
 
 		a = a->next;
 	}
+
+	messageBox_print(messBox,MESBOX_VALID,"Save:finish.\n");
 
 		write(this->file,"*",1);	
 	return;

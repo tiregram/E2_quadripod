@@ -81,6 +81,7 @@ set_interface_attribs (int fd, int speed, int parity)
 set_blocking (int fd, int should_block)
 {
 	struct termios tty;
+
 	memset (&tty, 0, sizeof tty);
 	if (tcgetattr (fd, &tty) != 0)
 	{
@@ -92,7 +93,7 @@ set_blocking (int fd, int should_block)
 	tty.c_cc[VTIME] = 5;            // 0.5 seconds read timeout
 
 	if (tcsetattr (fd, TCSANOW, &tty) != 0)
-		;
+		return;
 	// error_message ("error %d setting term attributes", errno);
 }
 

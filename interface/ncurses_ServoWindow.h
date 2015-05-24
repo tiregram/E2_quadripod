@@ -2,9 +2,11 @@
 #define servowindow
 #include "../data/data_struct.h"
 #include "ncurses_CmdLine.h"
+#include "ncurses_inputNumber.h"
+
 typedef struct {
-	struct input_panel* pos;
-	struct input_panel* pin;
+	 ncu_inputNumber* pos;
+	 ncu_inputNumber* pin;
 	WINDOW * win;
 } ncu_servo;
 
@@ -13,11 +15,22 @@ typedef struct {
 	int actual;		
 } ncu_list_servo;
 
-ncu_list_servo * servoWindows_init(int posx , int posy/*,t_mouv * mouv*/);
-void servoWindows_refrechWindows( ncu_list_servo * servos);
-void  servoWindows_change(ncu_list_servo* l_servo,t_mouv * mouv);
-int servoWindows_action(ncu_list_servo*  , cmd_line * cmda);
+ncu_list_servo *
+ncu_servoWindows_init(int posx , int posy);
 
-void servoWindows_hide(ncu_list_servo * this);
-void servoWindows_show(ncu_list_servo * this);
+void 
+ncu_servoWindows_refrechWindows( ncu_list_servo * servos);
+
+void 
+ncu_servoWindows_change(ncu_list_servo* l_servo,t_mouv * mouv);
+
+int  
+ncu_servoWindows_action(ncu_list_servo*  , cmd_line * cmda);
+
+void 
+ncu_servoWindows_hide(ncu_list_servo * this);
+
+void 
+ncu_servoWindows_show(ncu_list_servo * this);
+
 #endif
