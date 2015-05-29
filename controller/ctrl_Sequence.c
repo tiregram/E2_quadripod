@@ -18,6 +18,8 @@ ncu_list_servo * serv;
 ncu_frame * frame;
 ncu_fileSelect * file_selector;
 
+
+
 int Cseq_init(){
 	char** menu= menu_list_init(20,8);
 	menu[0] ="cree";
@@ -64,16 +66,28 @@ int Cseq_lauch(){
 
 				break;
 			case 2:
+				if(seqa->first == NULL)
+					break;
+				if(seqa->curent == NULL)
+					break;
+
 				ncu_sequence_action(interface_seq,cmda);
 				ncu_sequence_del(interface_seq);
 				break;
 			case 3:
+				if(seqa->first == NULL)
+					break;
+				if(seqa->curent == NULL)
+					break;
 				
 				ncu_sequence_action(interface_seq,cmda);
-
+				
+				ncu_fileSelect_getUART(interface_seq,cmda);
+							
 				break;
 
 			case 4 : 
+				
 				ncu_fileSelect_getFIle(file_selector,cmda,O_RDONLY);
 				file_charge(file_selector->file,seqa,messBoxa);
 				messageBox_refrech(messBoxa);

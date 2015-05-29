@@ -1,3 +1,5 @@
+#ifndef ncu_fileSelect_include
+#define ncu_fileSelect_include
 #include "ncurses_InputString.h"
 #include "../data/data_modelFile.h"
 #include "../data/data_modelUart.h"
@@ -22,3 +24,7 @@ ncu_fileSelect_createUart(ncu_fileSelect * this,ncu_cmdLine * cmdp);
 
 void 
 ncu_fileSelect_getFIle(ncu_fileSelect * this, ncu_cmdLine * cmdp,int opt);
+
+void ncu_fileSelect_createUart(ncu_fileSelect * this,ncu_cmdLine * cmdp);
+
+#endif 
