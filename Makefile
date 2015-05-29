@@ -70,6 +70,8 @@ ncurses_FileSelect.o:
 	@$(CC) -o ncurses_FileSelect.o -c interface/ncurses_FileSelect.c $(CFLAGS) $(COLOR)
 
 
+open_cv:
+	g++ `pkg-config --cflags opencv` interface/opencv_gesture.cpp interface/opencv_jostic.cpp `pkg-config --libs opencv` -o testMouvzsh -g -O2
 
 
 

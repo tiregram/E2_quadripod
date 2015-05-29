@@ -82,7 +82,7 @@ int Cseq_lauch(){
 				
 				ncu_sequence_action(interface_seq,cmda);
 				
-				ncu_fileSelect_getUART(interface_seq,cmda);
+				ncu_fileSelect_getUart(interface_seq,cmda);
 							
 				break;
 

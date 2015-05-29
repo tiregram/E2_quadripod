@@ -9,7 +9,7 @@
 #define SIZE_FIRST 30
 #define SIZE_SECOND 100
 
-//typedef void (*actionPointer)(void); // function pointeAr type
+typedef (bool)(*actionPointer)(vector<Ve3f>*,Mat*); // function pointeAr type
 //typedef void (*detectPointer)(void); // function pointeAr type
 //typedef std::map<std::string, ScriptFunction> script_map;:
 using  namespace cv;

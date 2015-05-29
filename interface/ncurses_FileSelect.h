@@ -25,6 +25,6 @@ ncu_fileSelect_createUart(ncu_fileSelect * this,ncu_cmdLine * cmdp);
 void 
 ncu_fileSelect_getFIle(ncu_fileSelect * this, ncu_cmdLine * cmdp,int opt);
 
-void ncu_fileSelect_createUart(ncu_fileSelect * this,ncu_cmdLine * cmdp);
+void ncu_fileSelect_getUart(ncu_fileSelect * this,ncu_cmdLine * cmdp);
 
 #endif 
