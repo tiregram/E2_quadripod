@@ -40,6 +40,7 @@ void sequence_add(list_sequence * this,char atend,char * name,int num ,circular_
 void sequence_deplacement(list_sequence * this , int sens);
 void sequence_del(list_sequence * this);
 
+void sequence_tool_replace(char * replace,char when,char by);
 void sequence_free(list_sequence* this);
 void sequence_drop(list_sequence* this);
 void sequence_export_command_all(int file_dest ,circular_vector * seque);

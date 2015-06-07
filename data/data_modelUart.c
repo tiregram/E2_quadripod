@@ -7,6 +7,7 @@
 #include "data_struct.h"
 #include "data_Sequence.h"
 #include "../include/basic.h"
+#include "../interface/ncurses_MessageBox.h"
 #include "data_modelUart.h"
 #include <fcntl.h>
 
@@ -99,30 +100,53 @@ set_blocking (int fd, int should_block)
 
 
 
-int uart_sendNew(uart_struct * this, circular_vector * sequence){
-	char a[3];
+int uart_sendNew(uart_struct * this, list_sequence *sequence,MessBox *mess){
+	if(sequence->curent->send){
+		messageBox_print(mess,MESBOX_BASIC,"\nla sequence est deja sur le robot");		
+		return 1;
+	}
+	messageBox_print(mess,MESBOX_BASIC,"\nenvoie de la sequence");		
+
+	char a[2];
 	write (this->file, "C", 1);
-	sequence_export_command_all(this->file,sequence);
+	sequence_export_command_all(this->file,sequence->curent->seq);
 	write (this->file, "$", 1);
 	read(this->file,a,2);
+	sequence->curent->send=1;
+	messageBox_print(mess,MESBOX_VALID,"\nsequence envoie");
 	return atoi(a);
 }
 
-void uart_sendModif(uart_struct * this, circular_vector * sequence,int indice){
+int uart_sendModif(uart_struct * this, list_sequence * sequence,MessBox *mess){
+	
+	if(sequence->curent->send){
+		messageBox_print(mess,MESBOX_BASIC,"\nla sequence est deja sur le robot");		
+		return 1;
+	}
+
+	messageBox_print(mess,MESBOX_BASIC,"\nenvoie de la sequence");
 	write (this->file, "M", 1);
-	char a[3];
-	sprintf(a,"%i",indice);
+	char a[2];
+	sprintf(a,"%2i",sequence->curent->num);
 	write(this->file, a, 2);
-	sequence_export_command_all(this->file,sequence);
+	sequence_export_command_all(this->file,sequence->curent->seq);
+	sequence_tool_replace(a,' ','0');
 	write (this->file, "$", 1);
+	sequence->curent->send = 1;	
+	messageBox_print(mess,MESBOX_VALID,"\nsequence send");
+	return 1;
 }
 
-void uart_sendJouer(uart_struct * this , int indice){
+int uart_sendJouer(uart_struct * this ,list_sequence * sequence,MessBox * mess){
+	messageBox_print(mess,MESBOX_VALID,"\ndebut de la sequence");
 	write (this->file, "J", 1);
 	char a[3];
-	sprintf(a,"%2i\n",indice);
+	sprintf(a,"%2i\n",sequence->curent->num);
+	sequence_tool_replace(a,' ','0');
 	write(this->file, a, 3);
+	return 1;
 }
+
 
 
 

@@ -3,6 +3,7 @@
 #include "../data/data_modelUart.h"
 #include <ncurses.h>
 #include <stdlib.h>
+#include <string.h>
 #include "ncurses_FileSelect.h"
 
 
@@ -19,8 +20,18 @@ ncu_fileSelect* ncu_fileSelect_init(int sizeX,int sizeY,int startX,int startY){
 	return this;
 }
 
-void ncu_fileSelect_createUart(ncu_fileSelect * this,ncu_cmdLine * cmdp){
+void ncu_fileSelect_getUart(ncu_fileSelect * this,ncu_cmdLine * cmdp){
+	if(this->uart != NULL)
+		return;
+
+	char name[30];
 	mvwprintw(this->win,1,getmaxx(this->win)/2-2,"UART");
+
+	mvwprintw(this->win,2,getmaxx(this->win)/2-2,"DEST");
+	mvwin(this->input->win,getbegy(this->win)+3,getbegx(this->win)+1);
+	ncu_inputString_changeCible(this->input,name,30);
+	ncu_inputString_clean_string(this->input);
+	strcpy(name,"/dev/ttyUSB0");	
 	wrefresh(this->win);
 	ncu_inputString_action(this->input,cmdp);
 	this->uart = uart_init(this->input->tab);

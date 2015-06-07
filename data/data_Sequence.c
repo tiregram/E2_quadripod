@@ -208,7 +208,7 @@ void sequence_del(list_sequence * this){
 // nepta define la fonction void (*varname)(uar_instancez*, struct circular_...);
 void sequence_export_command_one(int  file_dest,struct circular_vector_mouv * mouv){
 	char  a[20];	
-	write (file_dest, "F", 1);
+	write(file_dest, "F", 1);
 
 	sprintf(a,"%7ld",mouv->delay);
 	sequence_tool_replace(a,' ','0');

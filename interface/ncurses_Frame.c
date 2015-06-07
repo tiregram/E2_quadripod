@@ -13,7 +13,7 @@ ncu_frame * ncu_frame_init(int x,int y/*,circular_vector* data*/){
 	this->servo_panel = ncu_servoWindows_init(25,0);
 	//servoWindows_refrechWindows(this->servo_panel);
 
-	this->delay = ncu_inputSelect_init(NULL,y+5+9,x+18,100,999999,6);
+	this->delay = ncu_inputSelect_init(NULL,y+5+9,x+18,100,9999999,7);
 	this->scrool = newwin(19,48,y+5,x+1);
 	
 	return this;

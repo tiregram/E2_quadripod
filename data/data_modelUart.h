@@ -1,6 +1,7 @@
 #ifndef uart_instance_include
 #define uart_instance_include 
-#include "data_struct.h"
+#include "data_Sequence.h"
+#include "../interface/ncurses_MessageBox.h"
 typedef struct{
 	int file;
 	char * nom;
@@ -8,7 +9,7 @@ typedef struct{
 } uart_struct;
 
 uart_struct * uart_init(char *  portname );
-int uart_sendNew(uart_struct * this, circular_vector * sequence);
-void uart_sendModif(uart_struct * this, circular_vector * sequence,int indice);
-void uart_sendJouer(uart_struct * this , int indice);
+int uart_sendNew(uart_struct * this, list_sequence * sequence,MessBox * mess);
+int uart_sendModif(uart_struct * this, list_sequence* sequence,MessBox * mess);
+int uart_sendJouer(uart_struct * this , list_sequence * sequence,MessBox * mess);
 #endif

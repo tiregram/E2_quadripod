@@ -42,7 +42,7 @@ void Cseq_setFileSelector(ncu_fileSelect * fs){
 void Cseq_dest(){
 	ncu_menu_dest(menu_seq);
 	ncu_sequence_dest(interface_seq);		
-	ncu_frame_dest(frame);	
+	ncu_frame_dest(frame);
 }
 
 
@@ -61,9 +61,10 @@ int Cseq_lauch(){
 					break;
 
 				ncu_sequence_action(interface_seq,cmda);
+				seqa->curent->send=0;
+				ncu_sequence_refrech(interface_seq);
 				ncu_frame_change(frame,seqa->curent->seq);
 				ncu_frame_action(frame,cmda);	
-
 				break;
 			case 2:
 				if(seqa->first == NULL)
@@ -73,6 +74,7 @@ int Cseq_lauch(){
 
 				ncu_sequence_action(interface_seq,cmda);
 				ncu_sequence_del(interface_seq);
+				ncu_sequence_refrech(interface_seq);
 				break;
 			case 3:
 				if(seqa->first == NULL)
@@ -82,8 +84,11 @@ int Cseq_lauch(){
 				
 				ncu_sequence_action(interface_seq,cmda);
 				
-				ncu_fileSelect_getUart(interface_seq,cmda);
-							
+				ncu_fileSelect_getUart(file_selector,cmda);
+				uart_sendModif(file_selector->uart, seqa,messBoxa);
+				uart_sendJouer(file_selector->uart,seqa,messBoxa);
+				messageBox_refrech(messBoxa);
+				ncu_sequence_refrech(interface_seq);
 				break;
 
 			case 4 : 
@@ -100,6 +105,7 @@ int Cseq_lauch(){
 				file_save(file_selector->file,seqa,messBoxa);
 				messageBox_refrech(messBoxa);
 				file_exit( file_selector->file);
+				ncu_sequence_refrech(interface_seq);
 				break;		
 			case -1:return 0;
 				break;

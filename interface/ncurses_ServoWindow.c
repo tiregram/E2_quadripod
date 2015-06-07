@@ -5,7 +5,15 @@
 #include "ncurses_CmdLine.h"
 #include "../include/basic.h"
 
-
+char * tabCuise[nb_servo] = {
+	"cuisse GAUCHE AV",
+	"cuisse DROITE AV",
+	"cuisse GAUCHE AV",
+	"cuisse DROITE AR",
+	"pate GAUCHE AV",
+	"pate DROITE AV",
+	"pate GAUCHE AV",
+	"pate DROITE AR"};
 
 void 	pricFunc_refrechWindow( ncu_servo * servo);
 ncu_servo * privFunc_new(int x , int y/*,t_mouv val*/);
@@ -93,7 +101,7 @@ void  ncu_servoWindows_show(ncu_list_servo * this){
 
 	for(int i = 0; i<nb_servo;i++){
 		box(this->list[i].win, 0 , 0);		
-		wprintw(this->list[i].win," %s","test");
+		wprintw(this->list[i].win," %s",tabCuise[i]);
 		mvwprintw(this->list[i].win, 2, 2, "pin:");
 		mvwprintw(this->list[i].win, 4, 2, "pos:");
 		wrefresh(this->list[i].win);
@@ -119,7 +127,7 @@ void privFunc_select(ncu_list_servo* this){
 	int a = A_REVERSE;
 	wattron(this->list[this->actual].win,a);
 	box(this->list[this->actual].win, 0 , 0);	
-	mvwprintw(this->list[this->actual].win,0,0," %s","test");
+	mvwprintw(this->list[this->actual].win,0,0," %s",tabCuise[this->actual]);
 	wattroff(this->list[this->actual].win,a);
 	wrefresh(this->list[this->actual].win);
 	ncu_inputSelect_Actualiser(this->list[this->actual].pos);
@@ -128,7 +136,7 @@ void privFunc_select(ncu_list_servo* this){
 
 void privFunc_deselect(ncu_list_servo*this){
 	box(this->list[this->actual].win, 0 , 0);		
-	mvwprintw(this->list[this->actual].win,0,0," %s","test");
+	mvwprintw(this->list[this->actual].win,0,0," %s",tabCuise[this->actual]);
 	wrefresh(this->list[this->actual].win);
 
 	ncu_inputSelect_Actualiser(this->list[this->actual].pin);

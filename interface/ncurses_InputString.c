@@ -50,6 +50,8 @@ void ncu_inputString_clean_string(ncu_inputString * this){
 
 void ncu_inputString_select(ncu_inputString * this){
 	for(int i = 0; i<this->sizeTab;i++){
+		if(this->tab[i]=='\0'|| this->tab[i]=='\n')
+			break;
 
 		mvwaddch(this->win,0,i,this->tab[i]|A_REVERSE);
 	}
@@ -59,6 +61,8 @@ void ncu_inputString_select(ncu_inputString * this){
 void ncu_inputString_deselect(ncu_inputString * this){
 
 	for(int i = 0; i<this->sizeTab;i++){
+		if(this->tab[i]=='\0'|| this->tab[i]=='\n')
+			break;
 		mvwaddch(this->win,0,i,this->tab[i]);
 	}
 	wrefresh(this->win);

@@ -8,10 +8,10 @@
 
 typedef struct {
 	ncu_inputString *input;
-	union{
+	
 		uart_struct * uart;
 		file_struct * file;		
-	};
+	
 	WINDOW* win;
 }ncu_fileSelect;
 
@@ -25,6 +25,7 @@ ncu_fileSelect_createUart(ncu_fileSelect * this,ncu_cmdLine * cmdp);
 void 
 ncu_fileSelect_getFIle(ncu_fileSelect * this, ncu_cmdLine * cmdp,int opt);
 
-void ncu_fileSelect_getUart(ncu_fileSelect * this,ncu_cmdLine * cmdp);
+void 
+ncu_fileSelect_getUart(ncu_fileSelect * this,ncu_cmdLine * cmdp);
 
 #endif 
