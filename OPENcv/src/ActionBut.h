@@ -12,6 +12,9 @@ class Action_But {
 public:
 	Action_But();
 	virtual ~Action_But();
+
+
+
 };
 
 #endif /* ACTIONBUT_H_ */

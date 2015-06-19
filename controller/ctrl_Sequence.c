@@ -85,8 +85,10 @@ int Cseq_lauch(){
 				ncu_sequence_action(interface_seq,cmda);
 				
 				ncu_fileSelect_getUart(file_selector,cmda);
+
 				uart_sendModif(file_selector->uart, seqa,messBoxa);
 				uart_sendJouer(file_selector->uart,seqa,messBoxa);
+
 				messageBox_refrech(messBoxa);
 				ncu_sequence_refrech(interface_seq);
 				break;
@@ -94,7 +96,9 @@ int Cseq_lauch(){
 			case 4 : 
 				
 				ncu_fileSelect_getFIle(file_selector,cmda,O_RDONLY);
+
 				file_charge(file_selector->file,seqa,messBoxa);
+
 				messageBox_refrech(messBoxa);
 				file_exit(file_selector->file);	
 				ncu_sequence_refrech(interface_seq);

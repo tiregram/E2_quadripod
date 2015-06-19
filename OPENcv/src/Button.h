@@ -7,24 +7,35 @@
 
 #ifndef BUTTON_H_
 #define BUTTON_H_
+#define TIME_VALID 100;
+#define TIME_REPEAT 100;
 
 
 #include <vector>
 #include <tuple>
 #include <utility>
+#include <string>
+#include "ItemInterface.h"
+#include "DetectInterface.h"
 #include "Action.h"
 #include "Detect.h"
 
-class Button {
+
+class Button : public ItemInterface {
 public:
-	Button();
+	Button( std::string ,int ,int ,int  );
 	virtual ~Button();
-	void addDetectAndAction(std::vector<std::pair<int,int> > );
+	virtual void addDetectAndAction(std::vector<std::pair<DetectInterface,Action>>&);
+	virtual void draw(cv::Mat& img);
 
 private:
+	int x;
+	int y;
+	int size;
+	std::string name;
+	bool valid;
 	int timerDeValid;
 	int timeBeforeRepeat;
-
 
 };
 

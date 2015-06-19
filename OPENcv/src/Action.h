@@ -8,13 +8,20 @@
 #ifndef ACTION_H_
 #define ACTION_H_
 
+#include <iostream>
+#include <string>
+
 class Action {
 public:
-	Action();
+	Action(std::string name );
 	virtual ~Action();
-	virtual void doAction()=0;
+	virtual void doAction();
+private:
+
+	std::string name;
 
 
 };
+
 
 #endif /* ACTION_H_ */

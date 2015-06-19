@@ -9,8 +9,9 @@ CPP_SRCS += \
 ../src/ActionInterface.cpp \
 ../src/Button.cpp \
 ../src/Detect.cpp \
+../src/DetectInterface.cpp \
 ../src/Image.cpp \
-../src/ItemIterface.cpp \
+../src/ItemInterface.cpp \
 ../src/Joystick.cpp \
 ../src/OPENcv.cpp 
 
@@ -20,8 +21,9 @@ OBJS += \
 ./src/ActionInterface.o \
 ./src/Button.o \
 ./src/Detect.o \
+./src/DetectInterface.o \
 ./src/Image.o \
-./src/ItemIterface.o \
+./src/ItemInterface.o \
 ./src/Joystick.o \
 ./src/OPENcv.o 
 
@@ -31,8 +33,9 @@ CPP_DEPS += \
 ./src/ActionInterface.d \
 ./src/Button.d \
 ./src/Detect.d \
+./src/DetectInterface.d \
 ./src/Image.d \
-./src/ItemIterface.d \
+./src/ItemInterface.d \
 ./src/Joystick.d \
 ./src/OPENcv.d 
 
@@ -41,7 +44,7 @@ CPP_DEPS += \
 src/%.o: ../src/%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
-	g++ -I-I/usr/include/opencv -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	g++ -I/usr/include/opencv -O0 -g3 -Wall -c -fmessage-length=0 -std=c++11 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

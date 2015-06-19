@@ -9,13 +9,14 @@
 #define JOYSTICK_H_
 
 #include <vector>
+#include "ItemInterface.h"
 
-class Joystick : ItemIterface{
+class Joystick : public ItemInterface {
 public:
-	Joystick();
+	Joystick(int *x,int* y,int size,int* maxX,int* maxY,int* minX ,int* minY);
 	virtual ~Joystick();
-
-	void draw();
+	virtual void draw(cv::Mat& img);
+	virtual void addActionAndDetect(std::vector<std::pair<Detect,Action>>);
 
 private:
 

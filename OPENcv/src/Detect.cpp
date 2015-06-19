@@ -6,6 +6,8 @@
  */
 
 #include "Detect.h"
+#include <string>
+
 
 Detect::Detect() {
 	// TODO Auto-generated constructor stub
@@ -16,3 +18,8 @@ Detect::~Detect() {
 	// TODO Auto-generated destructor stub
 }
 
+
+
+bool Detect::tryDetect(){
+return false;
+}

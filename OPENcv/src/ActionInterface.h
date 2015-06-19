@@ -10,7 +10,7 @@
 
 #include "Action.h"
 
-class Action_Interface: public Action {
+class Action_Interface{
 public:
 	Action_Interface();
 	virtual ~Action_Interface();
