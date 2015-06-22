@@ -1,6 +1,7 @@
 #ifndef sequence_initclude
 #define sequence_initclude
 #include "data_struct.h"
+#include "data_Sequence.h"
 
 #define sequence_vide_oui 1
 #define sequence_vide_non 0
@@ -12,6 +13,8 @@
 #define SEQUENCE_AT_BEGIN 1
 #define SEQUENCE_AT_CURENT_A 2
 #define SEQUENCE_AT_CURENT_P 3
+
+
 
 
 
@@ -39,6 +42,7 @@ void sequence_add(list_sequence * this,char atend,char * name,int num ,circular_
 
 void sequence_deplacement(list_sequence * this , int sens);
 void sequence_del(list_sequence * this);
+sequenc * sequence_get(list_sequence * this, unsigned int num);
 
 void sequence_tool_replace(char * replace,char when,char by);
 void sequence_free(list_sequence* this);

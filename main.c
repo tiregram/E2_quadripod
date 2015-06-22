@@ -7,5 +7,6 @@ int main(){
 	ret = Cbase_init();
 	ret = Cbase_lauch();
 	ret = Cbase_destr();
+	ret =ret+1;
 	return 0;
 }

@@ -17,6 +17,8 @@ ncu_fileSelect* ncu_fileSelect_init(int sizeX,int sizeY,int startX,int startY){
 	box(this->win,0,0);	
 	this->input = ncu_inputString_init_NewString(startX+1,startY+2,sizeX-2);
 	ncu_inputString_changeFunctionChar(this->input , &ncu_fileSelect_acceptchar );
+	this->uart = NULL;
+	this->file = NULL;
 	return this;
 }
 

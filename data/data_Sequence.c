@@ -237,6 +237,30 @@ void sequence_export_command_all(int file_dest ,circular_vector * seque){
 	}while(seque->first != ite);
  }
 
+
+
+sequenc* sequence_subget(sequenc * this,unsigned int num,sequenc * max){
+	if(this->num == num)
+	{
+		return this;
+	}else{
+		if(this!=max){
+			return sequence_subget( this->next ,num,max);
+		}
+		else{
+			return NULL;
+		}
+	}
+
+
+}
+
+
+sequenc* sequence_get(list_sequence * this, unsigned int num){
+	return sequence_subget(this->first,num,this->last);
+}
+
+
 void sequence_tool_replace(char * replace,char when,char by){
 	for(unsigned int i = 0;i < (unsigned int )strlen(replace);i++){
 	

@@ -8,8 +8,17 @@ typedef struct{
 	int work;
 } uart_struct;
 
+
+
+
+
 uart_struct * uart_init(char *  portname );
 int uart_sendNew(uart_struct * this, list_sequence * sequence,MessBox * mess);
 int uart_sendModif(uart_struct * this, list_sequence* sequence,MessBox * mess);
 int uart_sendJouer(uart_struct * this , list_sequence * sequence,MessBox * mess);
+int uart_ping_cpp(int file);
+int uart_sendModifBasic(int file,sequenc * sequence,MessBox * mess);
+int uart_ping(uart_struct * this);
+int uart_sendJouer_cpp(int file ,char num);
+
 #endif

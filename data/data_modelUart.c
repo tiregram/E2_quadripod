@@ -118,24 +118,31 @@ int uart_sendNew(uart_struct * this, list_sequence *sequence,MessBox *mess){
 }
 
 int uart_sendModif(uart_struct * this, list_sequence * sequence,MessBox *mess){
+	uart_sendModifBasic(this->file,sequence->curent ,mess);
+
+}
+
+int uart_sendModifBasic(int file,sequenc * sequence,MessBox *mess){
 	
-	if(sequence->curent->send){
+	if(sequence->send){
 		messageBox_print(mess,MESBOX_BASIC,"\nla sequence est deja sur le robot");		
 		return 1;
 	}
 
 	messageBox_print(mess,MESBOX_BASIC,"\nenvoie de la sequence");
-	write (this->file, "M", 1);
+	write (file, "M", 1);
 	char a[2];
-	sprintf(a,"%2i",sequence->curent->num);
-	write(this->file, a, 2);
-	sequence_export_command_all(this->file,sequence->curent->seq);
+	sprintf(a,"%2i",sequence->num);
+	write(file, a, 2);
+	sequence_export_command_all(file,sequence->seq);
 	sequence_tool_replace(a,' ','0');
-	write (this->file, "$", 1);
-	sequence->curent->send = 1;	
+	write (file, "$", 1);
+	sequence->send = 1;
 	messageBox_print(mess,MESBOX_VALID,"\nsequence send");
 	return 1;
 }
+
+
 
 int uart_sendJouer(uart_struct * this ,list_sequence * sequence,MessBox * mess){
 	messageBox_print(mess,MESBOX_VALID,"\ndebut de la sequence");
@@ -147,27 +154,43 @@ int uart_sendJouer(uart_struct * this ,list_sequence * sequence,MessBox * mess){
 	return 1;
 }
 
+int uart_sendSet(uart_struct * this ,unsigned char pos ,unsigned char pin,MessBox * mess){
+	
+	char a[30] =" ";
+	sprintf(a,"\n Maj: pin-%i << pos-%i...",pin,pos);
+	messageBox_print(mess,MESBOX_VALID,a);
+	char b[7];
+	sprintf(b,"s%2i%3i",pin,pos);
+	sequence_tool_replace(a,' ','0');
+	write(this->file, b, 6);
+	messageBox_print(mess,MESBOX_VALID,"Do");
+	return 1;
+}
+
+int uart_ping_cpp(int file){
+	write(file,"T",1);	
+	return 0;
+}
+
+int uart_ping(uart_struct * this){
+	uart_ping_cpp(this->file);
+	
+
+	return 1;
+}
+
+int uart_sendJouer_cpp(int file ,char num){
+	write (file, "J", 1);
+	char a[3];
+	sprintf(a,"%2i\n",num);
+	sequence_tool_replace(a,' ','0');
+	write(file, a, 3);
+	return 1;
+}
 
 
 
 
 
-/*
-   char *portname = "/dev/ttyUSB1"
-   int fd = open (portname, O_RDWR | O_NOCTTY | O_SYNC);
-   if (fd < 0)
-   {
-   error_message ("error %d opening %s: %s", errno, portname, strerror (errno));
-   return;
-   }
 
-   set_interface_attribs (fd, B115200, 0);  // set speed to 115,200 bps, 8n1 (no parity)
-   set_blocking (fd, 0);                // set no blocking
 
-   write (fd, "hello!\n", 7);           // send 7 character greeting
-
-   usleep ((7 + 25) * 100);             // sleep enough to transmit the 7 plus
-// receive 25:  approx 100 uS per char transmit
-char buf [100];
-int n = read (fd, buf, sizeof buf);  // read up to 100 characters if ready to read
-*/

@@ -1,4 +1,5 @@
 #include "ctrl_Base.h"
+#include "ctrl_openCv.h"
 #include "../data/data_ListMenu.h"
 #include "../include/ctrl.h"
 #include "ctrl_Sequence.h"
@@ -27,13 +28,16 @@ int Cbase_lauch(){
 			ncu_menu_refrech(menu_base);
 			break;
 		case 1: 
+			Copencv_lauch();
 			ncu_menu_refrech(menu_base);
 			break;
 		case  2: 
+			messageBox_print(messBoxa,MESBOX_BASIC,"Dans un premier temps il est preférable de crée des sequence");
 			break;
 		case 3: 
 			return 0;
 			break;
+
 		case -1:return 0;
 			break;
 	}
@@ -66,6 +70,11 @@ int Cbase_init(){
 	file_selector = ncu_fileSelect_init(20,6,25,1);
 	
 	Cseq_init();
+	Copencv_init();
+
+	Copencv_setFileSelector(file_selector);
+	Cseq_setFileSelector(file_selector);
+
 	return 0;
 	
 }
