@@ -14,6 +14,10 @@
 #define SAY_MOUV_4 		8
 
 #define NUMBER_OF_ACTION 9
+
+
+
+
 typedef struct{
 	int file;
 	int (*ping)(int);

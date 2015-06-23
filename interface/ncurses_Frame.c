@@ -5,6 +5,8 @@
 #include "ncurses_Frame.h"
 #include "ncurses_ServoWindow.h"
 #include "ncurses_CmdLine.h"
+#include "../include/global.h"
+#include "../interface/ncurses_FileSelect.h"
 
 ncu_frame * ncu_frame_init(int x,int y/*,circular_vector* data*/){
 	ncu_frame * this = malloc(sizeof(ncu_frame));
@@ -128,6 +130,10 @@ int ncu_frame_action(ncu_frame* this,ncu_cmdLine* cmda){
 			break;
 		case 'd':
 			ncu_frame_change_delay(this);		
+			break;
+		case 's':
+			for(int count=0;count<nb_servo;count++ )
+				uart_sendSet(fileSelecGlobal->uart,this->data->curent->mouv[count].pin ,this->data->curent->mouv[count].pos);
 			break;
 		case 'e':
 

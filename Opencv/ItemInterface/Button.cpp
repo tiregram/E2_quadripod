@@ -46,7 +46,7 @@ void Button::draw(cv::Mat& img){
 void Button::addDetectAndAction(std::vector<std::pair<DetectInterface,Action>>& vad,data_UartSender * sender){
 
 	DetectInterface det(this->x,this->y,this->size);
-	Action act(this->name,num,sender);
+	Action act(this->name,this->num,sender);
 
 
 	vad.push_back(std::make_pair(det,act));

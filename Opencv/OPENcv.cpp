@@ -42,15 +42,15 @@ int main_cpp(data_UartSender * sender) {
 	std::cout << "list Item" <<std::endl;
 	std::vector<ItemInterface> listItem;
 
-	Button but("mouv1",0,100,100,30);
-	Button but1("mouv2",1,100,200,30);
-	Button but2("mouv3",2,100,300,30);
-	Button but3("mouv4",3,100,400,30);
+	Button but("mouv1",SAY_MOUV_1,100,100,30);
+	Button but1("mouv2",SAY_MOUV_2,100,200,30);
+	Button but2("mouv3",SAY_MOUV_3,100,300,30);
+	Button but3("mouv4",SAY_MOUV_4,100,400,30);
 
-	Button but4("RIGHT",4,400,300,30);
-	Button but5("UP",SAY_AVANCE,500,200,30);
-	Button but6("DOWN",6,500,400,30);;
-	Button but7("LEFT",7,600,300,30);
+	Button but4("LEFT",SAY_RIGHT,400,300,30);
+	Button but5("RUN",SAY_AVANCE,500,200,30);
+	Button but6("BACK",SAY_RECULE,500,400,30);;
+	Button but7("RIGHT",SAY_LEFT,600,300,30);
 
 
 	std::cout << "detecte and action" <<std::endl;
@@ -71,17 +71,13 @@ int main_cpp(data_UartSender * sender) {
 
 
 	while('q' !=cv::waitKey(10)){
+
 		image.creeImage();
 
 
-
-		image.detectCircle(25,44);
-		image.isolateCircles();
-		cv::Point cercle1=image.averageCenter();
-
 		for(auto ite : detecteToActionButton)
 		{
-			if(ite.first.tryToDetect(cercle1)){
+			if(ite.first.tryToDetect(image.getCommande()->getPoint())){
 
 				ite.second.doAction();
 
@@ -89,13 +85,11 @@ int main_cpp(data_UartSender * sender) {
 
 		}
 
-		image.detectCircle(96,110);
-		image.isolateCircles();
-		cv::Point cercle2=image.averageCenter();
+
 
 		for(auto ite : detecteToActionJoss)
 			{
-				if(ite.first.tryToDetect(cercle2)){
+				if(ite.first.tryToDetect(image.getJoystick()->getPoint())){
 
 					ite.second.doAction();
 
@@ -104,8 +98,7 @@ int main_cpp(data_UartSender * sender) {
 			}
 
 
-		image.drawCercle(cercle1,20,cv::Scalar(0,0,255),5);
-		image.drawCercle(cercle2,20,cv::Scalar(255,0,0),5);
+
 
 
 		but.draw(image.getImgOriginal());
@@ -124,4 +117,3 @@ int main_cpp(data_UartSender * sender) {
 
 	return 0;
 }
-

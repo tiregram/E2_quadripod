@@ -20,5 +20,6 @@ int uart_ping_cpp(int file);
 int uart_sendModifBasic(int file,sequenc * sequence,MessBox * mess);
 int uart_ping(uart_struct * this);
 int uart_sendJouer_cpp(int file ,char num);
+int uart_sendSet(uart_struct * this ,unsigned long pos ,unsigned long pin);
 
 #endif

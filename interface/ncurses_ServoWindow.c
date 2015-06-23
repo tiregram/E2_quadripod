@@ -4,16 +4,18 @@
 #include "ncurses_inputNumber.h"
 #include "ncurses_CmdLine.h"
 #include "../include/basic.h"
+#include "../data/data_modelUart.h"
+#include "../include/global.h"
 
 char * tabCuise[nb_servo] = {
-	"cuisse GAUCHE AV",
-	"cuisse DROITE AV",
-	"cuisse GAUCHE AV",
-	"cuisse DROITE AR",
 	"pate GAUCHE AV",
 	"pate DROITE AV",
 	"pate GAUCHE AV",
-	"pate DROITE AR"};
+	"pate DROITE AR",
+	"cuise GAUCHE AV",
+	"cuise DROITE AV",
+	"cuise GAUCHE AV",
+	"cuise DROITE AR"};
 
 void 	pricFunc_refrechWindow( ncu_servo * servo);
 ncu_servo * privFunc_new(int x , int y/*,t_mouv val*/);
@@ -145,6 +147,7 @@ void privFunc_deselect(ncu_list_servo*this){
 
 int ncu_servoWindows_action(ncu_list_servo* this,ncu_cmdLine * cmda){
 	privFunc_select(this);
+
 	int ch = ncu_cmd_getCh(cmda);
 	
 		switch(ch){
@@ -159,6 +162,13 @@ int ncu_servoWindows_action(ncu_list_servo* this,ncu_cmdLine * cmda){
 				privFunc_select(this);	
 				
 				break;
+			case 's':
+
+
+				uart_sendSet(fileSelecGlobal->uart,*(this->list[this->actual].pin->val) , *(this->list[this->actual].pos->val));
+
+				break;
+
 			case 'q':
 
 				privFunc_deselect(this);
@@ -166,10 +176,12 @@ int ncu_servoWindows_action(ncu_list_servo* this,ncu_cmdLine * cmda){
 				break;
 			case 'p':
 				ncu_inputSelect_modifInput(this->list[this->actual].pin);
-
+			//	uart_sendSet(fileSelecGlobal,this->list[this->actual].pos,this->list[this->actual].pin);
 				break;
 			case 'm':
 				ncu_inputSelect_modifInput(this->list[this->actual].pos);
+				uart_sendSet(fileSelecGlobal->uart,*(this->list[this->actual].pin->val) , *(this->list[this->actual].pos->val));
+
 				break;
 		}
 		return 1;

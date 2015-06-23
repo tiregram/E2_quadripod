@@ -9,6 +9,7 @@
 #include "../interface/ncurses_MessageBox.h"
 #include "../interface/ncurses_ListSequence.h"
 #include "../interface/ncurses_FileSelect.h"
+#include "../include/global.h"
 
 //ils sont 1 et ce ne sont que des * 
 
@@ -68,12 +69,13 @@ int Cbase_init(){
 	cmda = ncu_cmd_init();
 		
 	file_selector = ncu_fileSelect_init(20,6,25,1);
-	
+	fileSelecGlobal = file_selector;
 	Cseq_init();
 	Copencv_init();
 
 	Copencv_setFileSelector(file_selector);
 	Cseq_setFileSelector(file_selector);
+
 
 	return 0;
 	

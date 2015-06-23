@@ -11,6 +11,7 @@
 #include "data_modelUart.h"
 #include <fcntl.h>
 
+
 int set_interface_attribs (int fd, int speed, int parity);
 void set_blocking (int fd, int should_block);
 
@@ -119,7 +120,7 @@ int uart_sendNew(uart_struct * this, list_sequence *sequence,MessBox *mess){
 
 int uart_sendModif(uart_struct * this, list_sequence * sequence,MessBox *mess){
 	uart_sendModifBasic(this->file,sequence->curent ,mess);
-
+	return 0;
 }
 
 int uart_sendModifBasic(int file,sequenc * sequence,MessBox *mess){
@@ -154,16 +155,12 @@ int uart_sendJouer(uart_struct * this ,list_sequence * sequence,MessBox * mess){
 	return 1;
 }
 
-int uart_sendSet(uart_struct * this ,unsigned char pos ,unsigned char pin,MessBox * mess){
-	
-	char a[30] =" ";
-	sprintf(a,"\n Maj: pin-%i << pos-%i...",pin,pos);
-	messageBox_print(mess,MESBOX_VALID,a);
+int uart_sendSet(uart_struct * this ,unsigned long pin ,unsigned long pos){
 	char b[7];
-	sprintf(b,"s%2i%3i",pin,pos);
-	sequence_tool_replace(a,' ','0');
-	write(this->file, b, 6);
-	messageBox_print(mess,MESBOX_VALID,"Do");
+	sprintf(b,"S%2ld%3ld\n",pin,pos);
+	sequence_tool_replace(b,' ','0');
+	write(this->file, b, 7);
+
 	return 1;
 }
 
