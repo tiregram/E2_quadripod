@@ -1,4 +1,5 @@
 //g++ `pkg-config --cflags opencv` Image.cpp `pkg-config --libs opencv` -o Image
+//
 
 #include "Image.h"
 
