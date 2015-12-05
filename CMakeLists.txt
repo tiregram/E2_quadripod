@@ -4,7 +4,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../E3AF/cmake")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -g")
 SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
 
-project(E3AF)
+project(prg)
 
 include(FindCurses)
 
@@ -20,11 +20,11 @@ file (
 	)
 
 add_executable(
-	E3AFLauch
+	prg	
 	${source_files}
 	)
 
 add_definitions(-std=c++11)
 
-target_link_libraries(E3AFLauch ${OpenCV_LIBS} )
-target_link_libraries(E3AFLauch ${CURSES_LIBRARIES})
+target_link_libraries(prg ${OpenCV_LIBS} )
+target_link_libraries(prg ${CURSES_LIBRARIES})
